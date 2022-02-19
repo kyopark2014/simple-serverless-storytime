@@ -35,7 +35,7 @@ Lambda에서 SQS에 접속하기 위해서는 아래의 Permission을 등록하�
             ],
             "Resource": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-voicebookcreator-for-rekognition"
         }
-
+```
 
 
 ![image](https://user-images.githubusercontent.com/52392004/154795646-bf3ba7c8-f10d-43f7-bb4d-f11d63ba35e8.png)
