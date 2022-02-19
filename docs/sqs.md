@@ -75,7 +75,7 @@ Lambda는 Rekognition에 필요한 데이터를 SQS가 전달한 event에서 정
             "md5OfMessageAttributes": "3dd51a16c4e172dcf33861a1c8245e84",
             "md5OfBody": "5a54d9ad87f7c4c1c70c8f05b9515d5a",
             "eventSource": "aws:sqs",
-            "eventSourceARN": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-voicebookcreator-for-rekognition",
+            "eventSourceARN": "arn:aws:sqs:ap-northeast-2:******:sqs-simple-voicebookcreator-for-rekognition",
             "awsRegion": "ap-northeast-2"
         }
     ]
