@@ -241,3 +241,13 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
      
   
   
+
+## Related lambda projects
+### Save image into S3 and push to SQS
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
+
+### AWS Rekognition
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
+
+### AWS Poly
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
