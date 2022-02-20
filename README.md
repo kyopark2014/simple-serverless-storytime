@@ -58,7 +58,7 @@ SQS를 위한 Permission을 추가합니다.
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
 ```c
-git clone https://github.com/kyopark2014/simple-severless-voicebookcreator-upload
+$ git clone https://github.com/kyopark2014/simple-severless-voicebookcreator-upload
 ```
 
 
