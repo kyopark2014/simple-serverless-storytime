@@ -49,7 +49,7 @@ SQS를 위한 Permission을 추가합니다.
               "sqs:PurgeQueue",
               “sqs:GetQueueAttributes”
             ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-voicebookcreator-for-rekognition"
+            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-voicebookcreator-for-rekognition"
         }
 ```
 
