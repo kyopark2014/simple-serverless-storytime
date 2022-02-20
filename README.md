@@ -34,6 +34,8 @@ Invoke URL: https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev
 https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
 
 SQS를 위한 Permission을 추가합니다. 
+
+```c
         {
             "Effect": "Allow",
             "Action": [
@@ -48,7 +50,7 @@ SQS를 위한 Permission을 추가합니다.
             ],
             "Resource": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-voicebookcreator-for-rekognition"
         }
-
+```
 
 
 ![image](https://user-images.githubusercontent.com/52392004/154795646-bf3ba7c8-f10d-43f7-bb4d-f11d63ba35e8.png)
@@ -56,7 +58,7 @@ SQS를 위한 Permission을 추가합니다.
 
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
-``c
+```c
 git clone https://github.com/kyopark2014/simple-severless-voicebookcreator-upload
 ```
 
@@ -68,7 +70,7 @@ https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lamb
 
 SQS를 위한 Permission을 추가합니다. 
 
-``c
+```c
         {
             "Effect": "Allow",
             "Action": [
@@ -87,7 +89,7 @@ SQS를 위한 Permission을 추가합니다.
 
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
-``c
+```c
 git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
 ```
 
