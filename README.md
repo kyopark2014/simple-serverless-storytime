@@ -181,7 +181,7 @@ https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/docs
 <img width="955" alt="image" src="https://user-images.githubusercontent.com/52392004/154823982-cfb18c73-2ace-431c-bfa4-f8809efb2c52.png">
 
 
-생성된 URL 정보는 https://sqs.ap-northeast-2.amazonaws.com/677146750822/sqs-simple-voicebookcreator-for-polly 입니다. 
+생성된 URL 정보는 https://sqs.ap-northeast-2.amazonaws.com/****/sqs-simple-voicebookcreator-for-polly 입니다. 
 
 
 
