@@ -66,6 +66,7 @@ $ git clone https://github.com/kyopark2014/simple-severless-voicebookcreator-upl
 ## S3 구현
 
 아래 문서를 참조하여 “s3-simple-serverless-voicebookcreator” 이름의 S3을 생성합니다. 다만, 아래 문서에서는 S3 put event를 통해 Lambda를 호출하고 있지, 본 문서에서는 event notification trigger를 사용하지 않습니다. 
+
 https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/S3.md
 
 
@@ -73,6 +74,7 @@ https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/S3.m
 ## Lambda for Rekognition 구현
 
 아래 문서를 참조하여 “lambda-simple-voicebookcreator-for-rekognition”을 생성합니다. 
+
 https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
 
 SQS를 위한 Permission을 추가합니다. 
@@ -104,6 +106,7 @@ $ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-fo
 ## Lambda for Polly 구현
 
 아래 문서를 참조하여 “lambda-simple-voicebookcreator-for-polly”을 생성합니다. 
+
 https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
 
 SQS를 위한 Permission을 추가합니다. 
