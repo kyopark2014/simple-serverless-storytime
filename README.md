@@ -53,9 +53,7 @@ SQS를 위한 Permission을 추가합니다.
         }
 ```
 
-
-![image](https://user-images.githubusercontent.com/52392004/154795646-bf3ba7c8-f10d-43f7-bb4d-f11d63ba35e8.png)
-
+<img width="945" alt="image" src="https://user-images.githubusercontent.com/52392004/154827019-799cb155-fa67-4880-9c5d-6f8e89df91fc.png">
 
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
