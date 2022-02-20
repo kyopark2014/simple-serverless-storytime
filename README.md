@@ -58,8 +58,7 @@ SQS를 위한 Permission을 추가합니다.
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
 ```c
-$ git clone https://github.com/kyopark2014/simple-severless-voicebookcreator-upload
-```
+$ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
 
 
 
@@ -150,6 +149,24 @@ SNS을 위한 Permission을 추가합니다.
         }
 ```
 
+
+Polly가 S3에 mp3 파일을 저장하기 위한 퍼미션을 추가합니다.  이때, Resource는 “*"로 하여야 합니다. 
+
+```java
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Put*",
+                "s3:Get*",
+                "s3:List*",
+                "s3:Delete*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+```
+
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
 ```c
@@ -182,6 +199,40 @@ https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/docs
 
 
 생성된 URL 정보는 https://sqs.ap-northeast-2.amazonaws.com/****/sqs-simple-voicebookcreator-for-polly 입니다. 
+
+
+
+## 시험
+
+Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
+
+
+![image](https://user-images.githubusercontent.com/52392004/154842185-1ca3ecfb-0081-4977-bca4-e499cb1149b2.png)
+
+
+Curl로 시험하는 경우 
+
+```c
+$ curl -i https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev/upload -X POST --data-binary '@sample3.jpeg' -H 'Content-Type: image/jpeg' -H 'Content-Disposition: form-data; name="sample3"; filename="sample3.jpeg"'
+HTTP/2 200
+date: Sun, 20 Feb 2022 12:23:41 GMT
+content-type: application/json
+content-length: 127
+x-amzn-requestid: 554a5b3b-859b-41eb-90b2-fdf83ef13339
+x-amz-apigw-id: N1zfrFXuIE0FvJw=
+x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
+
+{"statusCode":200,"body":"{\"Bucket\":\"s3-simple-voicebookcreator\",\"Key\":\"sample3.jpeg\",\"ContentType\":\"image/jpeg\"}"}
+```
+
+
+## 결과 
+
+아래와 같이 지정된 메일로 링크를 포함한 결과가 전달됩니다. 링크 선택시 CloudFront를 통해 다운로드된 컨텐츠가 정상적으로 재생되는것을 확인하였습니다. 
+
+
+
+<img width="1108" alt="image" src="https://user-images.githubusercontent.com/52392004/154842470-06bde4a2-dfe3-4cd4-82e2-c128879e87e4.png">
 
 
 
