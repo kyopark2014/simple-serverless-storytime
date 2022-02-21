@@ -185,7 +185,7 @@ https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/sns.
 
 
 
-## SQS       
+## SQS 구현       
 
 아래 문서에 따라 “sqs-simple-voicebookcreator-for-rekognition”을 생성합니다. 
 
