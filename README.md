@@ -248,6 +248,9 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 
 Sample : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample.jpeg
 
+<img width="1267" alt="image" src="https://user-images.githubusercontent.com/52392004/154887184-977b2876-144a-4b22-9bfa-1e71933172e3.png">
+
+
 Result : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample-result.mp3
       
   
