@@ -213,7 +213,7 @@ Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Di
 Curl로 시험하는 경우 
 
 ```c
-$ curl -i https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev/upload -X POST --data-binary '@sample3.jpeg' -H 'Content-Type: image/jpeg' -H 'Content-Disposition: form-data; name="sample3"; filename="sample3.jpeg"'
+$ curl -i https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev/upload -X POST --data-binary '@sample.jpeg' -H 'Content-Type: image/jpeg' -H 'Content-Disposition: form-data; name="sample"; filename="sample.jpeg"'
 HTTP/2 200
 date: Sun, 20 Feb 2022 12:23:41 GMT
 content-type: application/json
@@ -235,9 +235,8 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 <img width="1108" alt="image" src="https://user-images.githubusercontent.com/52392004/154842470-06bde4a2-dfe3-4cd4-82e2-c128879e87e4.png">
 
 
-
-
-
+Sample : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample.jpeg
+Result : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample-result.mp3
      
   
   
