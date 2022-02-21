@@ -214,15 +214,15 @@ https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognitio
 https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
 
 
-## 시험
+## 시험방법
 
-Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
+1) Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
 
 
 ![image](https://user-images.githubusercontent.com/52392004/154842185-1ca3ecfb-0081-4977-bca4-e499cb1149b2.png)
 
 
-Curl로 시험하는 경우 
+2) Curl로 시험하는 경우 
 
 ```c
 $ curl -i https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev/upload -X POST --data-binary '@sample.jpeg' -H 'Content-Type: image/jpeg' -H 'Content-Disposition: form-data; name="sample"; filename="sample.jpeg"'
@@ -237,6 +237,17 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 {"statusCode":200,"body":"{\"Bucket\":\"s3-simple-voicebookcreator\",\"Key\":\"sample3.jpeg\",\"ContentType\":\"image/jpeg\"}"}
 ```
 
+3) 안드로이드 앱에서 하는 방법
+
+아래의 "API Tester: Debug requests"을 다운받습니다.
+
+<img width="327" alt="image" src="https://user-images.githubusercontent.com/52392004/154988722-d2a1c1bd-6db9-4c7e-9bb2-65d010e0bcfe.png">
+
+아래와 같이 서버주소를 입력하고, Params에서 Binary를 선택한다음 원하는 사진을 선택합니다. 여기서 Headers의 Content-Type은 application/octet-stream을 그래도 유지하여도 정상적으로 동작합니다.
+
+<img width="331" alt="image" src="https://user-images.githubusercontent.com/52392004/154989248-b01fa100-076f-4895-a8c1-d4fef7dac2dc.png">
+
+상단의 화살표 모양의 아이콘을 선택하여 발송하고 메일로 정상적으로 mp3로 된 음성파일이 들어오는지 확인합니다.
 
 ## 결과 
 
