@@ -28,7 +28,7 @@ Invoke URL: https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev
 
 
 
-## Lambda for Upload 
+## Lambda for Upload 구현
 
 아래 문서를 참조하여 “lambda-simple-voicebookcreator-upload”을 생성합니다. 
 
