@@ -202,6 +202,18 @@ https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/docs
 
 
 
+## Related lambda projects
+
+### Save image into S3 and push to SQS
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
+
+### AWS Rekognition
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
+
+### AWS Poly
+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
+
+
 ## 시험
 
 Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
@@ -241,12 +253,3 @@ Result : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/
   
   
 
-## Related lambda projects
-### Save image into S3 and push to SQS
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
-
-### AWS Rekognition
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
-
-### AWS Poly
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
