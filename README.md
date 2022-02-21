@@ -10,7 +10,7 @@ serverless architecture에 기반한 voice book creator를 간단하게 구현�
 
 
 
-## API Gateway 설정
+## API Gateway 구현
 
 아래의 가이드 문서를 참조하여 “api-simple-voicebookcreator” 생성합니다. 
 
@@ -28,7 +28,7 @@ Invoke URL: https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev
 
 
 
-## Lambda for Upload 설정 
+## Lambda for Upload 
 
 아래 문서를 참조하여 “lambda-simple-voicebookcreator-upload”을 생성합니다. 
 
@@ -185,7 +185,7 @@ https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/sns.
 
 
 
-## SQS 설정      
+## SQS       
 
 아래 문서에 따라 “sqs-simple-voicebookcreator-for-rekognition”을 생성합니다. 
 
