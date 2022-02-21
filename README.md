@@ -243,8 +243,7 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 아래와 같이 지정된 메일로 링크를 포함한 결과가 전달됩니다. 링크 선택시 CloudFront를 통해 다운로드된 컨텐츠가 정상적으로 재생되는것을 확인합니다.
 
 
-
-<img width="1108" alt="image" src="https://user-images.githubusercontent.com/52392004/154842470-06bde4a2-dfe3-4cd4-82e2-c128879e87e4.png">
+<img width="1017" alt="image" src="https://user-images.githubusercontent.com/52392004/154885543-97323489-9d01-45c4-8d96-f62012448889.png">
 
 
 Sample : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample.jpeg
