@@ -26,6 +26,9 @@ Invoke URL: https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev
  
 ![image](https://user-images.githubusercontent.com/52392004/154822165-12cc6d89-0645-4d65-9f27-03244f28f21f.png)
 
+Mapping Templates 등록시, image/jpeg 뿐 아니라, application/octet-stream, image/jpg, image/png도 아래와 같이 추가합니다.
+
+<img width="686" alt="image" src="https://user-images.githubusercontent.com/52392004/155043574-9489624b-c4dd-4c4a-8f0b-252d77d36e2d.png">
 
 
 ## Lambda for Upload 구현
