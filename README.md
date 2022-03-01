@@ -1,6 +1,6 @@
-# Simple Serverless Voice Book Creater
+# Simple Serverless Storytime
 
-serverless architecture에 기반한 voice book creator를 간단하게 구현하고자 합니다.
+serverless architecture에 기반한 책읽어주는 서비스(Storytime)을 구현하고자 합니다.
 이를 위한 구조는 아래와 같습니다.
 
 
