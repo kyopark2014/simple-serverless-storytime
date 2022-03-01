@@ -14,9 +14,9 @@ serverless architecture에 기반한 책읽어주는 서비스(Storytime)을 구
 
 아래의 가이드 문서를 참조하여 “api-simple-voicebookcreator” 생성합니다. 
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/api-gateway.md
+https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/api-gateway.md
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/api-gateway-log.md
+https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/api-gateway-log.md
 
 생성된 URL은 아래와 같습니다. 
 
@@ -69,15 +69,15 @@ $ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-fo
 
 아래 문서를 참조하여 “s3-simple-serverless-voicebookcreator” 이름의 S3을 생성합니다. 다만, 아래 문서에서는 S3 put event를 통해 Lambda를 호출하고 있지만, 여기에서는 event notification trigger를 사용하지 않습니다. 
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/S3.md
+https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/S3.md
 
 
 
 ## Lambda for Rekognition 구현
 
-아래 문서를 참조하여 “lambda-simple-voicebookcreator-for-rekognition”을 생성합니다. 
+아래 문서를 참조하여 “lambda-simple-storytime-for-rekognition”을 생성합니다. 
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
+https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/lambda-upload.md
 
 SQS를 위한 Permission을 추가합니다. 
 
@@ -94,14 +94,14 @@ SQS를 위한 Permission을 추가합니다.
               "sqs:PurgeQueue",
               "sqs:GetQueueAttributes"
             ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-voicebookcreator-for-polly"
+            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly"
         }
 ```
 
 아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
 
 ```c
-$ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
+$ git clone https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition
 ```
 
 
