@@ -5,7 +5,7 @@
 
 1) Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
 
-![Postman](/static/test-1.png)
+![test-1](https://user-images.githubusercontent.com/52392004/156370571-ebe65d13-c223-4b94-9713-459974bfb099.png)
 
 
 2) Curl로 시험하는 경우 
@@ -30,13 +30,13 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 
 <img width="327" alt="image" src="https://user-images.githubusercontent.com/52392004/154988722-d2a1c1bd-6db9-4c7e-9bb2-65d010e0bcfe.png">
 
-![Android](/static/test-2.png)
+<img width="327" alt="test-2" src="https://user-images.githubusercontent.com/52392004/156370605-5febce82-e3c7-470b-9a72-5ae62bd20cab.png">
 
 
 
 아래와 같이 서버주소를 입력하고, Params에서 Binary를 선택한다음 원하는 사진을 선택합니다. 여기서 Headers의 Content-Type은 application/octet-stream을 그래도 유지하여도 정상적으로 동작합니다.
 
-![Android](/static/test-3.png)
+<img width="331" alt="test-3" src="https://user-images.githubusercontent.com/52392004/156370689-760f91b8-1c8f-4b3b-9a05-9dd5ea7013ce.png">
 
 
 상단의 화살표 모양의 아이콘을 선택하여 발송하고 메일로 정상적으로 mp3로 된 음성파일이 들어오는지 확인합니다.
@@ -46,13 +46,12 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 아래와 같이 지정된 메일로 링크를 포함한 결과가 전달됩니다. 링크 선택시 CloudFront를 통해 다운로드된 컨텐츠가 정상적으로 재생되는것을 확인합니다.
 
 
-![Android](/static/test-4.png)
+<img width="1017" alt="test-4" src="https://user-images.githubusercontent.com/52392004/156370722-43cf999e-170b-499c-a02d-07dc4cbdb95f.png">
 
 
 Sample : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample.jpeg
 
-![Android](/static/test-5.png)
-
+<img width="1267" alt="test-5" src="https://user-images.githubusercontent.com/52392004/156370778-5b92de07-e87d-4c9f-8db1-86bc5d47f850.png">
 
 Result : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample-result.mp3
       
