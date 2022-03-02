@@ -28,8 +28,6 @@ x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
 
 아래의 "API Tester: Debug requests"을 다운받습니다.
 
-<img width="327" alt="image" src="https://user-images.githubusercontent.com/52392004/154988722-d2a1c1bd-6db9-4c7e-9bb2-65d010e0bcfe.png">
-
 <img width="327" alt="test-2" src="https://user-images.githubusercontent.com/52392004/156370605-5febce82-e3c7-470b-9a72-5ae62bd20cab.png">
 
 
