@@ -6,21 +6,22 @@
 https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/create/function
 
 
-![Create function](/static/lambda-polly-1.png)
+![lambda-polly-1](https://user-images.githubusercontent.com/52392004/156368639-1f030e90-3a24-49fa-9fd4-afd81102fcf6.png)
 
 
 
 2) [AWS Lambda] - [Functions] - [lambda-simple-storytime-for-polly]에서 [Configuration] - [Permission]을 선택한후, [Execution role]에서 “lambda-simple-storytime-for-polly-role-14o4htrd”을 선택하여 진입합니다. 
 
 
-![Permission](/static/lambda-polly-2.png)
+![lambda-polly-2](https://user-images.githubusercontent.com/52392004/156368679-779d6b63-dbb6-4e28-9ba6-867e35d9c9c0.png)
+
 
 
 
 3) [IAM] - [Roles]로 화면이 전환된 후에, 아래와 같이 [Permissions policies]에서 “AWSLambdaBasicExecutionRole-13cfb78d-c91c-4e17-b7d9-5682c45d077e”을 선택합니다. 
 
 
-![Role](/static/lambda-polly-3.png)
+![lambda-polly-3](https://user-images.githubusercontent.com/52392004/156368745-b84f9f28-9ef2-4932-99af-cb1972176c21.png)
 
 
 
@@ -73,7 +74,8 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 ```        
 
 
-![Json](/static/lambda-polly-4.png)
+![lambda-polly-4](https://user-images.githubusercontent.com/52392004/156368831-80aad1dd-3f2c-4627-9cde-c4e8a484d22a.png)
+
 
 
 
@@ -81,7 +83,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 5. AWS Lambda console로 이동하여, [Functions] - [lambda-simple-storytime-for-polly]의 [Code]에서 [Upload form]을 선택하여, “deploy.zip” 파일을 업로드 합니다. 업로드후 자동으로 Deply 되지만, 코드 수정시에는 [Deploy] 버튼을 눌러서 수동으로 Deploy 하여야 합니다.  관련된 코드는 아래와 같이 clone 하여 사용 합니다. 
 
 
-![Code](/static/lambda-polly-5.png)
+![lambda-polly-5](https://user-images.githubusercontent.com/52392004/156368887-2b5bac2f-f3df-499c-be0a-9e7c2ac2ceb5.png)
 
 
 
