@@ -12,7 +12,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 3) [Lambda] - [Funtions] - [lambda-simple-storytime-for-upload]에서 아래와 같이 [Configuration] - [Permissions]을 선택후, [Execution role]의 [Role name]을 아래와 같이 선택합니다. 본 워크샵의 예제에서는 아래와 같이 “lambda-simple-storytime-for-upload-role-8j2d00g8”을 선택합니다.
 
-![Function Overview]](https://user-images.githubusercontent.com/52392004/156359392-d1a508f4-9a36-491d-837d-609e17ccb002.png)
+![Function Overview](https://user-images.githubusercontent.com/52392004/156359392-d1a508f4-9a36-491d-837d-609e17ccb002.png)
 
 
 4) 이때 IAM의 [Roles]로 이동하는데, Policy를 수정하기 위하여 아래와 같이 [Permissions policies]에 있는 “AWSLambdaBasicExecutionRole-5563bf12-59f7-4b86-b93a-d12e61907695”을 선택합니다.
