@@ -5,11 +5,13 @@ weight : 40
 
 1) AWS 콘솔 에서 AWS Lambda 서비스로 이동합니다.
 
-[[Console]](https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/functions) https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/functions
+[[Console]](https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/functions)
+
+https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/functions
 
 2) [Create function]의 [Basic information]에서 [Function name]은 “lambda-simple-storytime-for-upload"으로 입력하고 [Runtime]으로 Node.js를 선택합니다. 이후 아래로 스크롤하여 [Create function]을 선택합니다.
  
-![Create function](/static/lambda-upload-1.png)
+![Create function](https://user-images.githubusercontent.com/52392004/156359235-90b417c5-98c5-4363-ad9b-fd691887e65f.png)
 
 3) [Lambda] - [Funtions] - [lambda-simple-storytime-for-upload]에서 아래와 같이 [Configuration] - [Permissions]을 선택후, [Execution role]의 [Role name]을 아래와 같이 선택합니다. 본 워크샵의 예제에서는 아래와 같이 “lambda-simple-storytime-for-upload-role-8j2d00g8”을 선택합니다.
 
