@@ -1,4 +1,4 @@
-# Module 1. Lambda for Upload 구현"
+# 1. Lambda for Upload 구현"
 
 1) AWS 콘솔 에서 AWS Lambda 서비스로 이동합니다.
 
