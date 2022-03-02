@@ -2,8 +2,8 @@
 
 ## Introduction
 
-본 워크샵에서는 AWS Serverless Architecture에 기반하여 책을 읽어주는 서비스(Storytime)을 구현하고자 합니다.
-이번 워크샵을 통해 이미지에서 텍스트를 추출하는 AWS Rekognition과 텍스트를 음성으로 변환하는 AWS Polly를 사용할 수 있게 됩니다. 더불어 AWS Lambda를 이용해 Serverless로 개발되므로 초기 투자없이 auto scaling이 가능한 비용 효율적인 아키텍트를 설계할 수 있습니다. 아래 그림은 전체적인 Severless Architecture에 구조에 대해 기술하고 있습니다. 
+여기에서는 AWS Serverless Architecture에 기반하여 책을 읽어주는 서비스(Storytime)을 구현하고자 합니다.
+이번을 통해 이미지에서 텍스트를 추출하는 AWS Rekognition과 텍스트를 음성으로 변환하는 AWS Polly를 사용할 수 있게 됩니다. 더불어 AWS Lambda를 이용해 Serverless로 개발되므로 초기 투자없이 auto scaling이 가능한 비용 효율적인 아키텍트를 설계할 수 있습니다. 아래 그림은 전체적인 Severless Architecture에 구조에 대해 기술하고 있습니다. 
 
 <img width="1195" alt="image" src="https://user-images.githubusercontent.com/52392004/154789870-4c21323d-6c01-4999-aac1-0119fdb71c02.png">
 
