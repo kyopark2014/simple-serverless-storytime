@@ -51,7 +51,7 @@ AWS Polly를 이용해 텍스트틀 mp3로 변환하여 S3에 저장합니다.
 9) [테스트 및 결과](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/test.md)
 파일을 업로드하여 테스트틑 하는 방법과 예상되는 결과를 검토합니다. 
 
-#별첨: [API Gateway Log 설정](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/api-gateway-log.md)
+참고: [API Gateway Log 설정](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/api-gateway-log.md)
 API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
 
 ## Source Codes
