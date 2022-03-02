@@ -1,272 +1,72 @@
-# Simple Serverless Storytime
+# Simple Serverless Storytime: AWS 서버리스로 간단한 책 읽어주는 서비스 만들기
 
-serverless architecture에 기반한 책읽어주는 서비스(Storytime)을 구현하고자 합니다.
-이를 위한 구조는 아래와 같습니다.
+## Introduction
 
-
+본 워크샵에서는 AWS Serverless Architecture에 기반하여 책을 읽어주는 서비스(Storytime)을 구현하고자 합니다.
+이번 워크샵을 통해 이미지에서 텍스트를 추출하는 AWS Rekognition과 텍스트를 음성으로 변환하는 AWS Polly를 사용할 수 있게 됩니다. 더불어 AWS Lambda를 이용해 Serverless로 개발되므로 초기 투자없이 auto scaling이 가능한 비용 효율적인 아키텍트를 설계할 수 있습니다. 아래 그림은 전체적인 Severless Architecture에 구조에 대해 기술하고 있습니다. 
 
 <img width="1195" alt="image" src="https://user-images.githubusercontent.com/52392004/154789870-4c21323d-6c01-4999-aac1-0119fdb71c02.png">
 
 
-
-
-## API Gateway 구현
-
-아래의 가이드 문서를 참조하여 “api-simple-voicebookcreator” 생성합니다. 
-
-https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/api-gateway.md
-
-https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/api-gateway-log.md
-
-생성된 URL은 아래와 같습니다. 
-
-Invoke URL: https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev
+주요 사용 시나리오는 아래와 같습니다.
  
- 
- 
-![image](https://user-images.githubusercontent.com/52392004/154822165-12cc6d89-0645-4d65-9f27-03244f28f21f.png)
+1) 사용자가 동화책과 같은 읽고자 하는 책을 카메라로 찍습니다.
 
-Mapping Templates 등록시, image/jpeg 뿐 아니라, application/octet-stream, image/jpg, image/png도 아래와 같이 추가합니다.
+2) 이미지를 RESTful API를 이용해 API Gateway를 통해 업로드를 합니다. 통신 프로토콜은 https를 이용합니다. 
+이후, Lambda for upload는 S3에 파일을 저장하고, Bucket 이름과 Key와 같은 정보를 event로 SQS에 전달합니다. 
 
-<img width="686" alt="image" src="https://user-images.githubusercontent.com/52392004/155043574-9489624b-c4dd-4c4a-8f0b-252d77d36e2d.png">
+3) SQS의 event는 Lambda for Rekognition에 전달되고, 이 정보는 AWS Rekognition를 통해 JSON 형태의 텍스트 정보를 추울합니다. 
 
+4) 텍스트 정보는 다시 SQS를 통해 Lambda for Polly로 전달되는데, JSON 형식의 event에서 텍스트틑 추출하여, AWS Polly를 통해 음성파일로 변환하게 됩니다.
 
-## Lambda for Upload 구현
+5) 음성파일은 S3에 저장되는데, Lambda for Polly를 이 정보를 CloudForont를 통해 외부에 공유할 수 있는 URL로 변환후, AWS SNS를 통해 사용자에게 이메일로 정보를 전달합니다. 
 
-아래 문서를 참조하여 “lambda-simple-voicebookcreator-upload”을 생성합니다. 
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
+## Modules
 
-SQS를 위한 Permission을 추가합니다. 
+1) [Lambda for upload 구현](/module1)
+AWS Lambda를 이용해 파일을 업로드하는 코드를 Node.js를 이용해 구현 합니다.
 
-```c
-        {
-            "Effect": "Allow",
-            "Action": [
-              "sqs:SendMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility",
-              "sqs:ReceiveMessage",
-              "sqs:TagQueue",
-              "sqs:UntagQueue",
-              "sqs:PurgeQueue",
-              “sqs:GetQueueAttributes”
-            ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-voicebookcreator-for-rekognition"
-        }
-```
+2) [API Gateway 구현](/module2)
+RESTful API를 구현하기 위하여 Endpoint로 API Gateway를 구현합니다. 
 
-<img width="945" alt="image" src="https://user-images.githubusercontent.com/52392004/154827019-799cb155-fa67-4880-9c5d-6f8e89df91fc.png">
+3) [Lambda for Rekognition 구현](/module3)
+이미지에서 텍스트를 추출합니다. 
 
-아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
-
-```c
-$ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
-```
-
-
-## S3 구현
-
-아래 문서를 참조하여 “s3-simple-serverless-voicebookcreator” 이름의 S3을 생성합니다. 다만, 아래 문서에서는 S3 put event를 통해 Lambda를 호출하고 있지만, 여기에서는 event notification trigger를 사용하지 않습니다. 
-
-https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/S3.md
-
-
-
-## Lambda for Rekognition 구현
-
-아래 문서를 참조하여 “lambda-simple-storytime-for-rekognition”을 생성합니다. 
-
-https://github.com/kyopark2014/simple-serverless-filestore/blob/main/docs/lambda-upload.md
-
-SQS를 위한 Permission을 추가합니다. 
-
-```java
-        {
-            "Effect": "Allow",
-            "Action": [
-              "sqs:SendMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility",
-              "sqs:ReceiveMessage",
-              "sqs:TagQueue",
-              "sqs:UntagQueue",
-              "sqs:PurgeQueue",
-              "sqs:GetQueueAttributes"
-            ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly"
-        }
-```
+4) [S3 구현](/module4)
+Amazon S3를 사용하기 위한 Bucket을 생성합니다. 
 
-아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
+5) [CloudFront 구현](/module5)
+컨텐츠를 공유하기 위한 CDN으로 CloudFront를 구현합니다. 
 
-```c
-$ git clone https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition
-```
+6) [Lambda for Polly 구현](/module6)
+AWS Polly를 이용해 텍스트틀 mp3로 변환하여 S3에 저장합니다. 
 
+7) [Amazon SNS 구현](/module7)
+업로드한 파일을 다운로드 링크를 email로 전달합니다. 
 
-## Lambda for Polly 구현
+8) [Amazon SQS 구현](/module8)
+각 서비스는 SQS를 통해 버퍼링 됩니다.
 
-아래 문서를 참조하여 “lambda-simple-voicebookcreator-for-polly”을 생성합니다. 
+9) [테스트 및 결과](/module7)
+파일을 업로드하여 테스트틑 하는 방법과 예상되는 결과를 검토합니다. 
 
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/lambda-upload.md
+#별첨: [API Gateway Log 설정](/module8)
+API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
 
-SQS를 위한 Permission을 추가합니다. 
+### Source Codes
+본 워크샵에 필요한 Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 바랍니다. 
 
-```java
-        {
-            "Effect": "Allow",
-            "Action": [
-              "sqs:SendMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility",
-              "sqs:ReceiveMessage",
-              "sqs:TagQueue",
-              "sqs:UntagQueue",
-              "sqs:PurgeQueue",
-              "sqs:GetQueueAttributes"
-            ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-voicebookcreator-for-polly"
-        }
-```            
-        
-SNS을 위한 Permission을 추가합니다.
+[[Github: Lambda-upload]](https://github.com/kyopark2014/simple-serverless-storytime-for-upload)
 
-```java
-	{
-            "Effect": "Allow",
-            "Action": [
-                "sns:Publish",
-                "sns:Subscribe",
-                "sns:CreateTopic",
-                "sns:GetTopicAttributes",
-                "sns:SetTopicAttributes",
-                "sns:TagResource",
-                "sns:UntagResource",
-                "sns:ListTagsForResource",
-                "sns:ListSubscriptionsByTopic"
-            ],
-            "Resource": [
-                "arn:aws:sns:ap-northeast-2:****:sns-simple-voicebookcreator"
-            ]
-        }
-```
+https://github.com/kyopark2014/simple-serverless-storytime-for-upload
 
+[[Github: Lambda-rekognition]](https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition)
 
-Polly가 S3에 mp3 파일을 저장하기 위한 퍼미션을 추가합니다.  이때, Resource는 “*"로 하여야 합니다. 
+https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition
 
-```java
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:Put*",
-                "s3:Get*",
-                "s3:List*",
-                "s3:Delete*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-```
 
-아래 github를 다운로드하여 “deploy.zip” 파일을 lambda에 [Deploy] 합니다.
+[[Github: Lambda-polly]](https://github.com/kyopark2014/simple-serverless-storytime-for-polly)
 
-```c
-$ git clone https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
-```
-
-
-## SNS 구현 
-
-아래 문서를 참조하여 “sns-simple-voicebookcreator”을 생성합니다. 
-
-https://github.com/kyopark2014/simple-serverless-filesharing/blob/main/docs/sns.md
-
-
-
-
-
-
-## SQS 구현       
-
-아래 문서에 따라 “sqs-simple-voicebookcreator-for-rekognition”을 생성합니다. 
-
-https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/docs/sqs.md
-
-또한, “sqs-simple-voicebookcreator-for-poly”를 추가로 생성합니다. Trigger AWS Lambda function에는 “lambda-simple-voicebookcreator-for-polly”를 선택하여야 하므로, 아래와 같이 “arn:aws:lambda:ap-northeast-2:*****:function:lambda-simple-voicebookcreator-for-polly”을 선택하고 [Save] 합니다.
-
-
-
-<img width="955" alt="image" src="https://user-images.githubusercontent.com/52392004/154823982-cfb18c73-2ace-431c-bfa4-f8809efb2c52.png">
-
-
-생성된 URL 정보는 https://sqs.ap-northeast-2.amazonaws.com/****/sqs-simple-voicebookcreator-for-polly 입니다. 
-
-
-
-## Related lambda projects
-
-### Save image into S3 and push to SQS
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload
-
-### AWS Rekognition
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-rekognition
-
-### AWS Poly
-https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-polly
-
-
-## 시험방법
-
-1) Postman에서 시험하는 경우에 아래와 같이 Content-Type과 Content-Disposition을 설정후, Binary를 첨부하여 테스트 합니다. 
-
-
-![image](https://user-images.githubusercontent.com/52392004/154842185-1ca3ecfb-0081-4977-bca4-e499cb1149b2.png)
-
-
-2) Curl로 시험하는 경우 
-
-```c
-$ curl -i https://spzxqv5ftg.execute-api.ap-northeast-2.amazonaws.com/dev/upload -X POST --data-binary '@sample.jpeg' -H 'Content-Type: image/jpeg' -H 'Content-Disposition: form-data; name="sample"; filename="sample.jpeg"'
-HTTP/2 200
-date: Sun, 20 Feb 2022 12:23:41 GMT
-content-type: application/json
-content-length: 127
-x-amzn-requestid: 554a5b3b-859b-41eb-90b2-fdf83ef13339
-x-amz-apigw-id: N1zfrFXuIE0FvJw=
-x-amzn-trace-id: Root=1-621232c8-37a90762301f99e01dc8c15e;Sampled=0
-
-{"statusCode":200,"body":"{\"Bucket\":\"s3-simple-voicebookcreator\",\"Key\":\"sample3.jpeg\",\"ContentType\":\"image/jpeg\"}"}
-```
-
-3) 안드로이드 앱에서 하는 방법
-
-아래의 "API Tester: Debug requests"을 다운받습니다.
-
-<img width="327" alt="image" src="https://user-images.githubusercontent.com/52392004/154988722-d2a1c1bd-6db9-4c7e-9bb2-65d010e0bcfe.png">
-
-아래와 같이 서버주소를 입력하고, Params에서 Binary를 선택한다음 원하는 사진을 선택합니다. 여기서 Headers의 Content-Type은 application/octet-stream을 그래도 유지하여도 정상적으로 동작합니다.
-
-<img width="331" alt="image" src="https://user-images.githubusercontent.com/52392004/154989248-b01fa100-076f-4895-a8c1-d4fef7dac2dc.png">
-
-상단의 화살표 모양의 아이콘을 선택하여 발송하고 메일로 정상적으로 mp3로 된 음성파일이 들어오는지 확인합니다.
-
-## 결과 
-
-아래와 같이 지정된 메일로 링크를 포함한 결과가 전달됩니다. 링크 선택시 CloudFront를 통해 다운로드된 컨텐츠가 정상적으로 재생되는것을 확인합니다.
-
-
-<img width="1017" alt="image" src="https://user-images.githubusercontent.com/52392004/154885543-97323489-9d01-45c4-8d96-f62012448889.png">
-
-
-Sample : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample.jpeg
-
-<img width="1267" alt="image" src="https://user-images.githubusercontent.com/52392004/154887184-977b2876-144a-4b22-9bfa-1e71933172e3.png">
-
-
-Result : https://github.com/kyopark2014/simple-serverless-voicebookcreator/blob/main/sample-result.mp3
-      
-  
-  
+https://github.com/kyopark2014/simple-serverless-storytime-for-polly 
 
