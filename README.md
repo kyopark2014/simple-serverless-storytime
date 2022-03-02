@@ -24,7 +24,7 @@
 
 ## Modules
 
-1) [Lambda for upload 구현](/module1)
+1) [Lambda for upload 구현](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/lambda-for-upload.md)
 AWS Lambda를 이용해 파일을 업로드하는 코드를 Node.js를 이용해 구현 합니다.
 
 2) [API Gateway 구현](/module2)
