@@ -62,8 +62,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 SQS에 대한 Permission을 추가후 [Review policy]를 선택합니다.
 
-![lambda-rekognition-5](https://user-images.githubusercontent.com/52392004/156369386-684db71e-18e5-488f-b0b9-608861c1dc24.png)
-
+![lambda-rekognition-5](https://user-images.githubusercontent.com/52392004/156475580-f441617f-2e2b-4ce5-bf1e-bb8dea9e2694.png)
 
 7) SQS에 대한 Policy를 확인후 [Save changes] 선택하여 저장합니다.
 
