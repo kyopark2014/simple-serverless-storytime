@@ -24,25 +24,24 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 ![lambda-polly-3](https://user-images.githubusercontent.com/52392004/156368745-b84f9f28-9ef2-4932-99af-cb1972176c21.png)
 
 
-
-4) [IAM] - [Policies]로 전환된 후, 새로 생성한 Lambda의 Policy를 수정하기 위하여 아래와 같이 [Ediit policy]를 눌러서, 수정화면으로 이동합니다. 이후 아래와 같이 SQS, SNS에 대한 Permission을 삽입합니다. 또한, Polly가 S3에 mp3 파일을 저장하기 위하여 S3에 대한 퍼미션도 추가합니다. 이때, Resources는 "*"로 하여야 합니다. 
+4) [IAM] - [Policies]로 전환된 후, 새로 생성한 Lambda의 Policy를 수정하기 위하여 아래와 같이 [Ediit policy]를 눌러서, 수정화면으로 이동합니다. 이후 아래와 같이 Polly, SQS, SNS, S3에 대한 Permission을 삽입합니다. 여기서 Polly가 S3에 mp3 파일을 저장하기 위하여 S3에 대한 write 퍼미션이 필요합니다. 이때, Resources는 "*"로 하여야 합니다. 
 
 ```java
         {
             "Effect": "Allow",
             "Action": [
-              "sqs:SendMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility",
-              "sqs:ReceiveMessage",
-              "sqs:TagQueue",
-              "sqs:UntagQueue",
-              "sqs:PurgeQueue",
-              "sqs:GetQueueAttributes"
+                "sqs:SendMessage",
+                "sqs:DeleteMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:ReceiveMessage",
+                "sqs:TagQueue",
+                "sqs:UntagQueue",
+                "sqs:PurgeQueue",
+                "sqs:GetQueueAttributes"
             ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly"
+            "Resource": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-storytime-for-polly"
         },
-		{
+        {
             "Effect": "Allow",
             "Action": [
                 "sns:Publish",
@@ -55,10 +54,13 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
                 "sns:ListTagsForResource",
                 "sns:ListSubscriptionsByTopic"
             ],
-            "Resource": [
-                "arn:aws:sns:ap-northeast-2:****:sns-simple-storytime"
-			]
-		},
+            "Resource": "arn:aws:sns:ap-northeast-2:677146750822:sns-simple-storytime"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "polly:*",
+            "Resource": "*"
+        },
         {
             "Effect": "Allow",
             "Action": [
@@ -67,11 +69,10 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
                 "s3:List*",
                 "s3:Delete*"
             ],
-            "Resource": [
-                "*"
-            ]
+            "Resource": "*"
         }
 ```        
+
 
 
 ![lambda-polly-4](https://user-images.githubusercontent.com/52392004/156368831-80aad1dd-3f2c-4627-9cde-c4e8a484d22a.png)
