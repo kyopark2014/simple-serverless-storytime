@@ -22,23 +22,9 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 ![lambda-rekognition-4](https://user-images.githubusercontent.com/52392004/156369312-64171e94-f214-4e11-ad23-8baeaf9eae48.png)
 
-6) [JSON]에서 아래와 같이 SQS에 대한 퍼미션을 추가합니다. Lambda for Rekognition은 양쪽에 SQS가 2개이므로 2개 등록합니다. 아례 예시에서 "****"은 AWS 계정 번호를 다른 퍼미션과 비교하여 입력하여야 합니다. 
+6) [JSON]에서 아래와 같이 SQS에 대한 퍼미션을 추가합니다. Lambda for Rekognition은 양쪽에 SQS가 2개이므로  resource에 SQS 2개를 모두 등록하여야 하며, Rekognition과 S3에 대한 Permission도 아래와 같이 추가 합니다. 아례 예시에서 "****"은 AWS 계정 번호를 다른 퍼미션과 비교하여 입력하여야 합니다. 
 
-```java        
-        {
-            "Effect": "Allow",
-            "Action": [
-              "sqs:SendMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility",
-              "sqs:ReceiveMessage",
-              "sqs:TagQueue",
-              "sqs:UntagQueue",
-              "sqs:PurgeQueue",
-              "sqs:GetQueueAttributes"
-            ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly"
-        },
+```java
         {
             "Effect": "Allow",
             "Action": [
@@ -51,9 +37,29 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
                 "sqs:PurgeQueue",
                 "sqs:GetQueueAttributes"
             ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-rekognition"
-        } 
-```
+            "Resource": [
+                "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly",
+                "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-rekognition"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "rekognition:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Put*",
+                "s3:Get*",
+                "s3:List*",
+                "s3:Delete*"
+            ],
+            "Resource": "*"
+        }
+```        
+
+
 SQS에 대한 Permission을 추가후 [Review policy]를 선택합니다.
 
 ![lambda-rekognition-5](https://user-images.githubusercontent.com/52392004/156369386-684db71e-18e5-488f-b0b9-608861c1dc24.png)
