@@ -52,11 +52,11 @@ lambdaUpload -> sqsRekognition -- : event (bucket, key)
 
 sqsRekognition -> lambdaRekognition ++ : event (bucket, key)
 
-lambdaRekognition -> rekognition : request (bucket, key)
+lambdaRekognition -> rekognition ++: request (bucket, key)
 
 rekognition -> rekognition : Image to JSON
 
-rekognition -> lambdaRekognition : 200OK (JSON)
+rekognition -> lambdaRekognition -- : 200OK (JSON)
 
 lambdaRekognition -> sqsPolly -- : event (JSON)
 
@@ -64,15 +64,15 @@ sqsPolly -> lambdaPolly ++ : event (JSON)
 
 lambdaPolly -> lambdaPolly : JSON to text
 
-lambdaPolly -> polly : request\n(text, dest bucket)
+lambdaPolly -> polly ++ : request\n(text, dest bucket)
 
 polly -> polly : test to voice
 
 polly -> s3 : upload mp3
 
-polly -> lambdaPolly : url
+polly -> lambdaPolly --: url
 
-lambdaPolly -> sns --: publish
+lambdaPolly -> sns --: publish url
 
 sns -> pop3 : request Email
 
