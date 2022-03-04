@@ -21,6 +21,10 @@
 
 5) 음성파일은 S3에 저장되는데, Lambda for Polly를 이 정보를 CloudForont를 통해 외부에 공유할 수 있는 URL로 변환후, AWS SNS를 통해 사용자에게 이메일로 정보를 전달합니다. 
 
+상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/156734020-6633d76c-2175-4142-8b8f-acdacd921802.png)
+
 
 ## Modules
 
