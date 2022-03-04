@@ -23,7 +23,7 @@
 
 상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
 
-![image](https://user-images.githubusercontent.com/52392004/156734020-6633d76c-2175-4142-8b8f-acdacd921802.png)
+![image](https://user-images.githubusercontent.com/52392004/156734231-3de877e5-4148-428b-850a-f74d38f60520.png)
 
 
 ## Modules
