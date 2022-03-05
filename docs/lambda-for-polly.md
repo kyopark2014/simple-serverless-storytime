@@ -21,7 +21,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 3) [IAM] - [Roles]로 화면이 전환된 후에, 아래와 같이 [Permissions policies]에서 “AWSLambdaBasicExecutionRole-13cfb78d-c91c-4e17-b7d9-5682c45d077e”을 선택합니다. 
 
 
-![lambda-polly-3](https://user-images.githubusercontent.com/52392004/156368745-b84f9f28-9ef2-4932-99af-cb1972176c21.png)
+![noname](https://user-images.githubusercontent.com/52392004/156880592-33cb09ed-afbc-48aa-a9dc-eea0458ddb59.png)
 
 
 4) [IAM] - [Policies]로 전환된 후, 새로 생성한 Lambda의 Policy를 수정하기 위하여 아래와 같이 [Ediit policy]를 눌러서, 수정화면으로 이동합니다. 이후 아래와 같이 Polly, SQS, SNS, S3에 대한 Permission을 삽입합니다. 여기서 Polly가 S3에 mp3 파일을 저장하기 위하여 S3에 대한 write 퍼미션이 필요합니다. 이때, Resources는 "*"로 하여야 합니다. 
