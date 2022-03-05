@@ -71,14 +71,7 @@ API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방�
 
 [[Github: Lambda-upload]](https://github.com/kyopark2014/simple-serverless-storytime-for-upload)
 
-https://github.com/kyopark2014/simple-serverless-storytime-for-upload
-
 [[Github: Lambda-rekognition]](https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition)
 
-https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition
-
-
 [[Github: Lambda-polly]](https://github.com/kyopark2014/simple-serverless-storytime-for-polly)
-
-https://github.com/kyopark2014/simple-serverless-storytime-for-polly 
 
