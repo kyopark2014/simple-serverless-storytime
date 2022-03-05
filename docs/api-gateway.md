@@ -73,7 +73,7 @@ https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-nor
 
 
 
-10) Binary contents 처리를 위해 [API-filestore] - [Resources] - [upload - POST]에서 [Integration Request]를 선택합니다. 이후 아래로 스크롤하여 [Mapping Templates]을 설정합니다.
+10) Binary contents 처리를 위해 [API-storytime] - [Resources] - [upload - POST]에서 [Integration Request]를 선택합니다. 이후 아래로 스크롤하여 [Mapping Templates]을 설정합니다.
 
 1. “Request body passthrough”에서 “When there are no templates defined (recommended)”를 선택
 
