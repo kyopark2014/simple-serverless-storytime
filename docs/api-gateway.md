@@ -63,8 +63,7 @@ https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-nor
 
 9) 아래와 같이 Add Permission to Lambda Function 팝업이 나타나면 [OK] 를 선택합니다.
 
-![apigw-10](https://user-images.githubusercontent.com/52392004/156360931-dca24093-e227-47ef-8865-be159d9cb6ee.png)
-
+![image](https://user-images.githubusercontent.com/52392004/156877435-d945f134-7094-4bb9-a07e-97f9de36ea31.png)
 
 이후 아래와 같이 생성된 API 를 확인 할 수 있습니다.
 
