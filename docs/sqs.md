@@ -40,7 +40,7 @@ https://ap-northeast-2.console.aws.amazon.com/sqs/v2/home?region=ap-northeast-2#
 
 3) SQS 생성후 모습은 아래와 같습니다. URL 정보는 Lambda 에서 SQS에 접속하기 위해 사용합니다. 또한 아래와 같이 [Amazon SQS] - [Queues] - [sqs-simple-storytime-for-polly]에서 하단의 [Lambda triggers] - [Configure Lambda function trigger]를 선택하여 SQS의 응답을 수신할 Lambda를 지정합니다.
 
-![sqs-polly-2](https://user-images.githubusercontent.com/52392004/156370382-6155623e-c293-4ea9-bdfc-ca04b1f7acc6.png)
+![noname](https://user-images.githubusercontent.com/52392004/156883303-906dd7fd-7f1a-4c49-b010-69c4b80b42eb.png)
 
 
 4) [Lambda function]에서 기생성한 "lambda-simple-storytime-for-polly”의 arn을 아래와 같이 선택하고 [Save]를 선택합니다.
