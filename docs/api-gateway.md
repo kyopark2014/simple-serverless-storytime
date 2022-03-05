@@ -57,7 +57,7 @@ https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-nor
 
 
 
-8) / - POST - Setup 화면이 나타납니다. [Ingegration type] 은 Lambda Function 을 선택하고 [Lambda Region] 은 ap-northeast-2 를 선택합니다. [Lambda Function] 에는 미리 만든 "lambda-simple-filestore-upload"를 선택합니다. [Save] 를 선택하여 API 메소드 생성을 완료합니다.
+8) / - POST - Setup 화면이 나타납니다. [Ingegration type] 은 Lambda Function 을 선택하고 [Lambda Region] 은 ap-northeast-2 를 선택합니다. [Lambda Function] 에는 미리 만든 "lambda-simple-storytime-upload"를 선택합니다. [Save] 를 선택하여 API 메소드 생성을 완료합니다.
 
 ![apigw-9](https://user-images.githubusercontent.com/52392004/156360883-d26e92ee-de2c-42ff-a4b2-d16443ee0a53.png)
 
