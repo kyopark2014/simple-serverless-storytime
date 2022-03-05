@@ -86,7 +86,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 5. AWS Lambda console로 이동하여, [Functions] - [lambda-storytime-for-polly]의 [Code]에서 [Upload form]을 선택하여, “deploy.zip” 파일을 업로드 합니다. 업로드후 자동으로 Deply 되지만, 코드 수정시에는 [Deploy] 버튼을 눌러서 수동으로 Deploy 하여야 합니다.  관련된 코드는 아래와 같이 clone 하여 사용 합니다. 
 
 ```c
-$ git clone https://github.com/kyopark2014/simple-serverless-storytime-for-polly 
+$ git clone https://github.com/kyopark2014/serverless-storytime-for-polly 
 ```
 
 
