@@ -20,7 +20,9 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 5) [IAM]의 [Policies]로 이동하면, [Permissions]에서 [Edit policy]를 선택합니다.
 
-![lambda-rekognition-4](https://user-images.githubusercontent.com/52392004/156369312-64171e94-f214-4e11-ad23-8baeaf9eae48.png)
+![noname](https://user-images.githubusercontent.com/52392004/156883218-90e7f67b-f99e-4d64-973c-277c834dbe4d.png)
+
+
 
 6) [JSON]에서 아래와 같이 SQS에 대한 퍼미션을 추가합니다. Lambda for Rekognition은 양쪽에 SQS가 2개이므로  resource에 SQS 2개를 모두 등록하여야 하며, Rekognition과 S3에 대한 Permission도 아래와 같이 추가 합니다. 아례 예시에서 "****"은 AWS 계정 번호를 다른 퍼미션과 비교하여 입력하여야 합니다. 
 
