@@ -24,4 +24,4 @@ https://console.aws.amazon.com/cloudfront/v3/home?region=ap-northeast-2#/distrib
 
 4) 나머지 설정은 default로 유지하고 [Create distribution]을 선택하여 Distribution을 등록합니다. 이때 생성을 위해 수분에서 수십분 시간이 소요되는데 아래와 같이 Status에서 “Enabled"가 되어야 사용할 수 있습니다. 또한, 아래와 같이 접속할 도메인의 주소를 “https://d2a58i4civia46.cloudfront.net” 와 같이 확인 할 수 있습니다. 
 
-![cloudfront-4](https://user-images.githubusercontent.com/52392004/156368285-f6f9ecac-cb83-43f7-a985-ca8e1011a03c.png)
+![noname](https://user-images.githubusercontent.com/52392004/156880503-5876ec2f-0d05-474b-8038-e58f6adacb22.png)
