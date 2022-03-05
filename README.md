@@ -67,7 +67,7 @@ AWS Polly를 이용해 텍스트틀 mp3로 변환하여 S3에 저장합니다.
 API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
 
 ## Source Codes
-본 워크샵에 필요한 Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 바랍니다. 
+Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 바랍니다. 
 
 [[Github: Lambda-upload]](https://github.com/kyopark2014/simple-serverless-storytime-for-upload)
 
