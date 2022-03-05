@@ -22,9 +22,13 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 ![noname](https://user-images.githubusercontent.com/52392004/156879573-0ffd69dd-125d-4abc-a705-cf401a0ce9a2.png)
 
+
+4) [IAM] - [Policies]로 전환된 후, 새로 생성한 Lambda의 Policy를 수정하기 위하여 아래와 같이 [Ediit policy]를 눌러서, 수정화면으로 이동합니다. 
+
 ![noname](https://user-images.githubusercontent.com/52392004/156879633-ef32296a-0451-4172-bd15-c1ef81ea07c0.png)
 
-4) [IAM] - [Policies]로 전환된 후, 새로 생성한 Lambda의 Policy를 수정하기 위하여 아래와 같이 [Ediit policy]를 눌러서, 수정화면으로 이동합니다. 이후 아래와 같이 Polly, SQS, SNS, S3에 대한 Permission을 삽입합니다. 여기서 Polly가 S3에 mp3 파일을 저장하기 위하여 S3에 대한 write 퍼미션이 필요합니다. 이때, Resources는 "*"로 하여야 합니다. 
+ 
+이후 아래와 같이 Polly, SQS, SNS, S3에 대한 Permission을 삽입합니다. 여기서 Polly가 S3에 mp3 파일을 저장하기 위하여 S3에 대한 write 퍼미션이 필요합니다. 이때, Resources는 "*"로 하여야 합니다. 
 
 ```java
         {
@@ -39,7 +43,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
                 "sqs:PurgeQueue",
                 "sqs:GetQueueAttributes"
             ],
-            "Resource": "arn:aws:sqs:ap-northeast-2:677146750822:sqs-simple-storytime-for-polly"
+            "Resource": "arn:aws:sqs:ap-northeast-2:****:sqs-simple-storytime-for-polly"
         },
         {
             "Effect": "Allow",
@@ -54,7 +58,7 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
                 "sns:ListTagsForResource",
                 "sns:ListSubscriptionsByTopic"
             ],
-            "Resource": "arn:aws:sns:ap-northeast-2:677146750822:sns-simple-storytime"
+            "Resource": "arn:aws:sns:ap-northeast-2:****:sns-simple-storytime"
         },
         {
             "Effect": "Allow",
@@ -75,25 +79,19 @@ https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#
 
 
 
-![lambda-polly-4](https://user-images.githubusercontent.com/52392004/156368831-80aad1dd-3f2c-4627-9cde-c4e8a484d22a.png)
+![noname](https://user-images.githubusercontent.com/52392004/156879718-12b373cf-7a02-4a04-aa97-dc527574a681.png)
 
 
 
-
-
-5. AWS Lambda console로 이동하여, [Functions] - [lambda-simple-storytime-for-polly]의 [Code]에서 [Upload form]을 선택하여, “deploy.zip” 파일을 업로드 합니다. 업로드후 자동으로 Deply 되지만, 코드 수정시에는 [Deploy] 버튼을 눌러서 수동으로 Deploy 하여야 합니다.  관련된 코드는 아래와 같이 clone 하여 사용 합니다. 
-
-
-![lambda-polly-5](https://user-images.githubusercontent.com/52392004/156368887-2b5bac2f-f3df-499c-be0a-9e7c2ac2ceb5.png)
-
-
-
-
-#### 소스 설치
-
-아래의 Repository에서 Lambda for Polly를 위한 Node.js 코드를 다운 받아 설치 합니다. 
+5. AWS Lambda console로 이동하여, [Functions] - [lambda-storytime-for-polly]의 [Code]에서 [Upload form]을 선택하여, “deploy.zip” 파일을 업로드 합니다. 업로드후 자동으로 Deply 되지만, 코드 수정시에는 [Deploy] 버튼을 눌러서 수동으로 Deploy 하여야 합니다.  관련된 코드는 아래와 같이 clone 하여 사용 합니다. 
 
 ```c
 $ git clone https://github.com/kyopark2014/simple-serverless-storytime-for-polly 
+```
+
+
+
+
+
 
 
