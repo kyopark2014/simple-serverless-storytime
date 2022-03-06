@@ -16,3 +16,53 @@ https://ap-northeast-2.console.aws.amazon.com/sqs/v2/home?region=ap-northeast-2#
 3) 팝업이 나오면, [Delete]를 선택하여 삭제합니다. 
 
 <img width="593" alt="image" src="https://user-images.githubusercontent.com/52392004/156905856-2f56e374-9f05-4c13-8929-12f88e9dc77a.png">
+
+
+## 2. SNS 삭제 
+
+1) SNS Console에 접속합니다. 
+
+https://ap-northeast-2.console.aws.amazon.com/sns/v3/home?region=ap-northeast-2#/topics
+
+2) [sns-simple-storytime]를 선택후 [Delete]를 선택합니다. 
+
+![noname](https://user-images.githubusercontent.com/52392004/156905939-afa7a87c-85b8-4403-bd50-b0e717de5857.png)
+
+3) 팝업에서 [Delete]를 선택하여 삭제합니다. 
+
+<img width="596" alt="image" src="https://user-images.githubusercontent.com/52392004/156905959-f33a0b24-5256-4282-a9d4-760de2c0d0d6.png">
+
+## 3. Lambda 삭제
+
+1) Lambda Console에 접속합니다. 
+
+https://ap-northeast-2.console.aws.amazon.com/lambda/home?region=ap-northeast-2#/functions
+
+2) [lambda-simple-storytime-for-upload], [lambda-simple-storytime-for-rekognition], [lambda-simple-storytime-for-polly]을 선택후 [Actions]에서 [Delete]를 선택합니다. 
+
+<img width="1362" alt="image" src="https://user-images.githubusercontent.com/52392004/156906011-5b362234-9532-45e9-9764-ccfaa536ed36.png">
+
+
+3) 팝업에서 Delete를 선택하여 삭제합니다. 
+
+<img width="814" alt="image" src="https://user-images.githubusercontent.com/52392004/156906022-1508026b-cc4a-47c1-9ef1-554af4f06186.png">
+
+
+## 4. CloudFront 삭제
+
+1) CloudFront Console에 접속합니다. 
+
+https://console.aws.amazon.com/cloudfront/v3/home?region=ap-northeast-2#/distributions
+
+2) Simple Storytime과 관련된 CloudFront를 선택하여 먼저 [Disable] 합니다. Origins가 "s3-simple-storytime"로 시작하므로 쉽게 찾을 수 있습니다. 
+
+<img width="1408" alt="image" src="https://user-images.githubusercontent.com/52392004/156906083-5fd1698f-a627-46f5-80d1-74c33f7f91d5.png">
+
+Disable 되는데 수분이상이 소요됩니다. [Detail]에서 "Deploying"이면 대기합니다.
+
+![noname](https://user-images.githubusercontent.com/52392004/156906126-4a55e580-e8d5-4e7f-9bc5-aad63f9cb039.png)
+
+Deploying이 완료되면, 
+
+
+
