@@ -62,7 +62,19 @@ Disable 되는데 수분이상이 소요됩니다. [Detail]에서 "Deploying"이
 
 ![noname](https://user-images.githubusercontent.com/52392004/156906126-4a55e580-e8d5-4e7f-9bc5-aad63f9cb039.png)
 
-Deploying이 완료되면, 
+Deploying이 완료되면, [Delete]를 선택합니다. 
 
+<img width="1414" alt="image" src="https://user-images.githubusercontent.com/52392004/156906155-a644cc28-2807-4725-b494-058a6fd335c1.png">
 
+팝업에서 [Delete]를 선택하여 삭제합니다. 
+
+<img width="592" alt="image" src="https://user-images.githubusercontent.com/52392004/156906168-f49d41f3-51f6-4144-9306-25b5cd6bb150.png">
+
+## 5. S3 삭제
+
+1) S3 Console에 접속합니다.
+
+https://s3.console.aws.amazon.com/s3/home?region=ap-northeast-2
+
+2) [s3-simple-storytime]에 진입하여 남아있는 ㄴ
 
