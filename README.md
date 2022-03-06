@@ -68,6 +68,8 @@ API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방�
 
 10) [서버 삭제](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/clean-up.md)
 
+서버를 더이상 사용하지 않는 경우에 삭제 방법에 대해 기술합니다. 
+
 ## Source Codes
 Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 바랍니다. 
 
