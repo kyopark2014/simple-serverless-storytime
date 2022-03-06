@@ -76,5 +76,31 @@ Deploying이 완료되면, [Delete]를 선택합니다.
 
 https://s3.console.aws.amazon.com/s3/home?region=ap-northeast-2
 
-2) [s3-simple-storytime]에 진입하여 남아있는 ㄴ
+2) [s3-simple-storytime]에 진입하여 남아있는 Objects를 모두 선택하여 [Delete] 합니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/156906260-ab42a276-7f1a-4ddb-985c-1fe11a042a19.png)
+
+3) [Amazon S3] - [Buckets]에서 [s3-simple-storytime]을 선택하여 [Delete]를 선택합니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/156906325-cc71de94-405d-496e-bb47-072111f7c4fe.png)
+
+4) [Delete bucket]을 선택하여 삭제합니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/156906342-d1a9ffeb-14c1-4798-9bf6-5a69e9112821.png)
+
+
+## 6. API Gateway 삭제
+
+1) API Gateway Console에 접속합니다. 
+
+https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-northeast-2
+
+2) [api-simple-storytime]을 선택한 후에 [Actions]에서 [Delete]를 선택합니다. 
+
+<img width="1408" alt="image" src="https://user-images.githubusercontent.com/52392004/156906378-94ef8d2a-b8ba-43e3-abd0-b56747821eca.png">
+
+3) 팝업에서 [Delete]를 선택하여 삭제합니다. 
+
+<img width="595" alt="image" src="https://user-images.githubusercontent.com/52392004/156906385-c3b6edd2-9096-4c84-b72c-04ddb65c2469.png">
+
 
