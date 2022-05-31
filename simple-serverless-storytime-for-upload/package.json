@@ -1,0 +1,22 @@
+{
+  "name": "simple-serverless-voicebookcreator-for-upload",
+  "version": "1.0.0",
+  "description": "본 저장소(Repository)를 통해 Simple Serverless Voice Book Creator ( https://github.com/kyopark2014/simple-serverless-voicebookcreator )의 Upload Lambda에 관련 코드를 관리하고자 합니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload/issues"
+  },
+  "homepage": "https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload#readme",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
