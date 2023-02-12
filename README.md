@@ -53,3 +53,7 @@ Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 �
 
 [[Github: Lambda-polly]](https://github.com/kyopark2014/simple-serverless-storytime-for-polly)
 
+
+## Reference
+
+[Enabling binary support using the API Gateway console](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-payload-encodings-configure-with-console.html)
