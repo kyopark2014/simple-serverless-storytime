@@ -26,15 +26,37 @@
 ![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
 
-### 왜 이런 Architecture를 선택했는가?
 
-- [서버리스로 이미지에서 텍스트 추출하기](https://github.com/kyopark2014/serverless-textextraction)에서 Textract로 동일한 결과를 얻었습니다. [비교필요함]
+## 왜 이런 Architecture를 선택했는가?
 
-- Event 방식의 다른 예와 비교, Event 방식의 장점, Concurrency 방식의 Lambda에도 Event 방식이 여전히 유효한가?
+#### Why Event Driven?
 
-- Event를 Synchronous하게 사용했는데 왜? Aysnchrnous하게 하지 않은 이유는? Textract를 보면 Async로 요청하고 Textract가 결과가 나오면 SNS가 받아서 Lambda를 Trigger 시킬수 있어서 SQS 사용과 비교가 필요함
+Event 방식의 다른 예를 설명합니다.
 
-- Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교 [Blur faces in videos automatically with Amazon Rekognition Video](https://aws.amazon.com/ko/blogs/machine-learning/blur-faces-in-videos-automatically-with-amazon-rekognition-video/) 참조
+Event 방식의 장점과 단점은?
+
+Concurrency 방식의 Lambda에도 Event 방식이 여전히 유효한가?
+
+
+#### Rekognition && Textract
+
+[서버리스로 이미지에서 텍스트 추출하기](https://github.com/kyopark2014/serverless-textextraction)에서 Textract로 동일한 결과를 얻었습니다. (비교 예정)
+
+
+
+#### Synchronous && Asynchronous
+
+Synchronous와 Asynchronous를 비교합니다. 
+
+Event를 Synchronous하게 사용했는데 왜? Aysnchrnous하게 하지 않은 이유는? 
+
+Textract 케이스를 보면 Async로 요청하고 Textract가 결과가 나오면 SNS가 받아서 Lambda를 Trigger 시킬수 있어서 SQS 유사함
+
+#### Step Function을 이용하는 경우
+
+Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교합니다.
+
+[Blur faces in videos automatically with Amazon Rekognition Video](https://aws.amazon.com/ko/blogs/machine-learning/blur-faces-in-videos-automatically-with-amazon-rekognition-video/)와 비교하여 설명합니다. 
 
 
 
