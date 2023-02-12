@@ -1,4 +1,4 @@
-# Simple Serverless Storytime: AWS 서버리스로 간단하게 책 읽어주는 서비스 만들기
+# 서버리스로 책 읽어주는 서비스를 편리하게 이용하기
 
 ## Introduction
 
