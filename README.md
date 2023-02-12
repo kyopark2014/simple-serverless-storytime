@@ -28,7 +28,7 @@
 
 ### 왜 이런 Architecture를 선택했는가?
 
-- [서버리스로 이미지에서 텍스트 추출하기]에서 Textract로 동일한 결과를 얻었습니다. [비교필요함]
+- [서버리스로 이미지에서 텍스트 추출하기](https://github.com/kyopark2014/serverless-textextraction)에서 Textract로 동일한 결과를 얻었습니다. [비교필요함]
 
 - Event 방식의 다른 예와 비교, Event 방식의 장점, Concurrency 방식의 Lambda에도 Event 방식이 여전히 유효한가?
 
