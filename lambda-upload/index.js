@@ -3,6 +3,10 @@ const cd = require('content-disposition');
 const {v4: uuidv4} = require('uuid');
 
 const s3 = new aws.S3({ apiVersion: '2006-03-01' });
+const sqs = new aws.SQS({apiVersion: '2012-11-05'});
+
+const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
+const bucketName = process.env.bucketName;
 
 exports.handler = async (event, context) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
@@ -41,10 +45,9 @@ exports.handler = async (event, context) => {
         filename = uuid+'.jpeg';
     }
     
-    const bucket = 's3-simple-storytime';
     try {
         const destparams = {
-            Bucket: bucket, 
+            Bucket: bucketName, 
             Key: filename,
             Body: body,
             ContentType: contentType
@@ -59,18 +62,17 @@ exports.handler = async (event, context) => {
     
     const fileInfo = {
         Id: uuid,
-        Bucket: bucket, 
+        Bucket: bucketName, 
         Key: filename,
     }; 
     console.log('file info: ' + JSON.stringify(fileInfo));
 
-    var sqs = new aws.SQS({apiVersion: '2012-11-05'});
-
+    
     var params = {
         DelaySeconds: 10,
         MessageAttributes: {},
         MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
-        QueueUrl: "https://sqs.ap-northeast-2.amazonaws.com/677146750822/sqs-simple-storytime-for-rekognition"
+        QueueUrl: sqsRekognitionUrl
     };
      
     console.log('params: '+JSON.stringify(params));

@@ -7,7 +7,9 @@ const path = require('path');
 
 aws.config.update({ region: process.env.AWS_REGION })
 
-const CDN = "https://d2a58i4civia46.cloudfront.net/"; // need to modify
+const CDN = process.env.CDN; 
+const sqsPollyUrl = process.env.sqsPollyUrl;
+const topicArn = process.env.topicArn;
 
 exports.handler = async (event) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
@@ -68,7 +70,7 @@ exports.handler = async (event) => {
         console.log('### delete messageQueue for ' + id);
         try {
             var deleteParams = {
-                QueueUrl: "https://sqs.ap-northeast-2.amazonaws.com/677146750822/sqs-simple-storytime-for-polly",
+                QueueUrl: sqsPollyUrl,
                 ReceiptHandle: receiptHandle
             };
 
@@ -91,7 +93,7 @@ exports.handler = async (event) => {
     var snsParams = {
         Subject: 'Get your voice book generated from '+name,
         Message: '('+id+') Link: '+url+'\n'+text,         
-        TopicArn: 'arn:aws:sns:ap-northeast-2:677146750822:sns-simple-storytime'
+        TopicArn: topicArn
     }; 
     console.log('snsParams: '+JSON.stringify(snsParams));
     

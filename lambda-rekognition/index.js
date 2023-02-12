@@ -1,6 +1,9 @@
 const aws = require('aws-sdk');
 var sqs = new aws.SQS({apiVersion: '2012-11-05'});
 
+const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
+const sqsPollyUrl= process.env.sqsPollyUrl;
+
 exports.handler = async (event) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     console.log('## EVENT: ' + JSON.stringify(event))
@@ -35,7 +38,7 @@ exports.handler = async (event) => {
         
         try {
             var deleteParams = {
-                QueueUrl: "https://sqs.ap-northeast-2.amazonaws.com/677146750822/sqs-simple-storytime-for-rekognition",
+                QueueUrl: sqsRekognitionUrl,
                 ReceiptHandle: receiptHandle
             };
         
@@ -62,7 +65,7 @@ exports.handler = async (event) => {
                 Name: name,
                 Data: JSON.stringify(data)
             }),  
-            QueueUrl: "https://sqs.ap-northeast-2.amazonaws.com/677146750822/sqs-simple-storytime-for-polly"
+            QueueUrl: sqsPollyUrl
         };
         
         console.log('sqsParams: '+JSON.stringify(sqsParams));

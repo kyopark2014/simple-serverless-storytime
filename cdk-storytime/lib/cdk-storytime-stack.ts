@@ -82,13 +82,13 @@ export class CdkStorytimeStack extends cdk.Stack {
     // Lambda - Upload
     const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
       runtime: lambda.Runtime.NODEJS_14_X, 
-      code: lambda.Code.fromAsset("../serverless-storytime-for-upload"), 
+      code: lambda.Code.fromAsset("../../lambda-upload"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
       environment: {
         sqsRekognitionUrl: queueRekognition.queueUrl,
         topicArn: topic.topicArn,
-        bucket: s3Bucket.bucketName
+        bucketName: s3Bucket.bucketName
       }
     });  
     queueRekognition.grantSendMessages(lambdaUpload);
