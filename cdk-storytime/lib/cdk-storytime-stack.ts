@@ -13,36 +13,41 @@ import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import {SqsEventSource} from 'aws-cdk-lib/aws-lambda-event-sources';
 
 const stage = "dev";
+const email = "storytimebot21@gmail.com";
 
 export class CdkStorytimeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // SQS - Rekognition
-    const queueRekognition = new sqs.Queue(this, 'QueueRekognition');
+    const queueRekognition = new sqs.Queue(this, 'QueueRekognition', {
+      queueName: "queue-rekognition",
+    });
     new cdk.CfnOutput(this, 'sqsRekognitionUrl', {
       value: queueRekognition.queueUrl,
       description: 'The url of the Rekognition Queue',
     });
     
     // SQS - Polly
-    const queuePolly = new sqs.Queue(this, 'QueuePolly');
+    const queuePolly = new sqs.Queue(this, 'QueuePolly', {
+      queueName: "queue-polly",
+    });
     new cdk.CfnOutput(this, 'sqsPollyUrl', {
       value: queuePolly.queueUrl,
       description: 'The url of the Polly Queue',
     });
 
     // SNS
-    const topic = new sns.Topic(this, 'sns-storytime', {
-      topicName: 'sns-storytime'
+    const topic = new sns.Topic(this, 'SNS', {
+      topicName: 'sns'
     });
-    topic.addSubscription(new subscriptions.EmailSubscription('storytimebot21@gmail.com'));
+    topic.addSubscription(new subscriptions.EmailSubscription(email));
     new cdk.CfnOutput(this, 'snsTopicArn', {
       value: topic.topicArn,
       description: 'The arn of the SNS topic',
     });
 
-    // s3 
+    // S3 
     const s3Bucket = new s3.Bucket(this, "storage",{
       // bucketName: bucketName,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
@@ -64,7 +69,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       description: 'The path of s3',
     });
 
-    // cloudfront
+    // CloudFront
     const distribution = new cloudFront.Distribution(this, 'cloudfront', {
       defaultBehavior: {
         origin: new origins.S3Origin(s3Bucket),
@@ -81,8 +86,9 @@ export class CdkStorytimeStack extends cdk.Stack {
 
     // Lambda - Upload
     const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
-      runtime: lambda.Runtime.NODEJS_14_X, 
-      code: lambda.Code.fromAsset("../../lambda-upload"), 
+      runtime: lambda.Runtime.NODEJS_16_X, 
+      functionName: "lambda-for-upload",
+      code: lambda.Code.fromAsset("../lambda-upload"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
       environment: {
@@ -95,11 +101,11 @@ export class CdkStorytimeStack extends cdk.Stack {
     topic.grantPublish(lambdaUpload);
     s3Bucket.grantReadWrite(lambdaUpload);
 
-
     // Lambda - Rekognition
     const lambdaRekognition = new lambda.Function(this, "LambdaRekognition", {
-      runtime: lambda.Runtime.NODEJS_14_X, 
-      code: lambda.Code.fromAsset("../serverless-storytime-for-rekognition"), 
+      runtime: lambda.Runtime.NODEJS_16_X, 
+      functionName: "lambda-for-rekognition",
+      code: lambda.Code.fromAsset("../lambda-rekognition"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
       environment: {
@@ -111,12 +117,10 @@ export class CdkStorytimeStack extends cdk.Stack {
     queuePolly.grantSendMessages(lambdaRekognition);
     s3Bucket.grantRead(lambdaRekognition);
 
-    // create a policy statement
-    const RekognitionPolicy = new iam.PolicyStatement({
+    const RekognitionPolicy = new iam.PolicyStatement({  // rekognition policy
       actions: ['rekognition:*'],
       resources: ['*'],
     });
-    // add the policy to the Function's role
     lambdaRekognition.role?.attachInlinePolicy(
       new iam.Policy(this, 'rekognition-policy', {
         statements: [RekognitionPolicy],
@@ -125,8 +129,9 @@ export class CdkStorytimeStack extends cdk.Stack {
  
     // Lambda - Polly
     const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
-      runtime: lambda.Runtime.NODEJS_14_X, 
-      code: lambda.Code.fromAsset("../serverless-storytime-for-polly"), 
+      runtime: lambda.Runtime.NODEJS_16_X, 
+      functionName: "lambda-for-poly",
+      code: lambda.Code.fromAsset("../lambda-polly"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
       environment: {
@@ -139,34 +144,19 @@ export class CdkStorytimeStack extends cdk.Stack {
     topic.grantPublish(lambdaPolly);
     s3Bucket.grantWrite(lambdaPolly);
 
-    // create a policy statement
-    const PollyPolicy = new iam.PolicyStatement({
+    const PollyPolicy = new iam.PolicyStatement({  // poloy policy
       actions: ['polly:*'],
       resources: ['*'],
     });
-    // add the policy to the Function's role
     lambdaPolly.role?.attachInlinePolicy(
       new iam.Policy(this, 'polly-policy', {
         statements: [PollyPolicy],
       }),
     );
 
-    // Lambda - Retrieve
-    const lambdaRetrieve = new lambda.Function(this, "LambdaRetrieve", {
-      runtime: lambda.Runtime.NODEJS_14_X, 
-      code: lambda.Code.fromAsset("../serverless-storytime-for-retrieve"), 
-      handler: "index.handler", 
-      timeout: cdk.Duration.seconds(10),
-      environment: {
-         bucket: s3Bucket.bucketName,
-         sqsRekognitionUri: queueRekognition.queueUrl
-      }
-    }); 
-    topic.grantPublish(lambdaRetrieve);
-
     // role
-    const role = new iam.Role(this, "api-role", {
-      roleName: "ApiRole",
+    const role = new iam.Role(this, "ApiRole", {
+      roleName: "api-role-storytime",
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
     });
     role.addToPolicy(new iam.PolicyStatement({
@@ -259,10 +249,6 @@ export class CdkStorytimeStack extends cdk.Stack {
     }); 
     new cdk.CfnOutput(this, 'apiUrl', {
       value: api.url,
-      description: 'The url of API Gateway',
-    }); 
-    new cdk.CfnOutput(this, 'curlUrl', {
-      value: "curl -X POST "+api.url+'text2image -H "Content-Type: application/json" -d \'{"text":"astronaut on a horse"}\'',
       description: 'The url of API Gateway',
     }); 
   }
