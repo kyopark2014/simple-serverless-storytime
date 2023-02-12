@@ -32,9 +32,10 @@
 
 - Event 방식의 다른 예와 비교, Event 방식의 장점, Concurrency 방식의 Lambda에도 Event 방식이 여전히 유효한가?
 
-- Event를 Synchronous하게 사용했는데 왜? Aysnchrnous하게 하지 않은 이유는? Textract처럼 A
+- Event를 Synchronous하게 사용했는데 왜? Aysnchrnous하게 하지 않은 이유는? Textract를 보면 Async로 요청하고 Textract가 결과가 나오면 SNS가 받아서 Lambda를 Trigger 시킬수 있어서 SQS 사용과 비교가 필요함
 
 - Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교 [Blur faces in videos automatically with Amazon Rekognition Video](https://aws.amazon.com/ko/blogs/machine-learning/blur-faces-in-videos-automatically-with-amazon-rekognition-video/) 참조
+
 
 
 
