@@ -51,6 +51,23 @@
 
 ### CDK로 배포하기
 
+Cloud9에서 CDK를 이용해 한번에 배포하는 과정을 설명합니다. 
+
+소스를 다운로드하고 해당 폴더로 이동합니다.
+
+```java
+git clone https://github.com/kyopark2014/simple-serverless-storytime
+cd simple-serverless-storytime/cdk-storytime 
+```
+
+필요한 라이브러리를 설치하고 CDK로 전체 인프라를 설치합니다.
+
+```java
+npm install aws-cdk-lib
+cdk deply
+```
+
+
 ## 실행결과
 
 [테스트 및 결과](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/test.md)
@@ -60,7 +77,11 @@
 참고: [API Gateway Log 설정](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/api-gateway-log.md)은
 API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
 
-10) [서버 삭제](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/clean-up.md)
+
+## 정리하기 
+
+[서버 삭제](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/clean-up.md)에 따라 사용한 리소스를 정리합니다.
+
 
 서버를 더이상 사용하지 않는 경우에 삭제 방법에 대해 기술합니다. 
 
