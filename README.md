@@ -25,15 +25,34 @@
 
 ![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
-## AWS Console로 구현하기
 
-[AWS Console로 구현하기](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/deployment-guide-console.md)에서는 각 컴포넌트를 AWS Console에서 구현합니다.
+### 왜 이런 Architecture를 선택했는가?
+
+- [서버리스로 이미지에서 텍스트 추출하기]에서 Textract로 동일한 결과를 얻었습니다. [비교필요함]
+
+- Event 방식의 다른 예와 비교, Event 방식의 장점, Concurrency 방식의 Lambda에도 Event 방식이 여전히 유효한가?
+
+- Event를 Synchronous하게 사용했는데 왜? Aysnchrnous하게 하지 않은 이유는? Textract처럼 A
+
+- Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교 [Blur faces in videos automatically with Amazon Rekognition Video](https://aws.amazon.com/ko/blogs/machine-learning/blur-faces-in-videos-automatically-with-amazon-rekognition-video/) 참조
+
+
+
+
+
+
 
 ## 배포하기
 
+### AWS Console로 구현하기
+
+[AWS Console로 구현하기](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/deployment-guide-console.md)에서는 각 컴포넌트를 AWS Console에서 구현합니다.
+
+### CDK로 배포하기
 
 ## 실행결과
-9) [테스트 및 결과](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/test.md)
+
+[테스트 및 결과](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/test.md)
 
 파일을 업로드하여 테스트틑 하는 방법과 예상되는 결과를 검토합니다. 
 
