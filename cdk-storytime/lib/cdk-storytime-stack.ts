@@ -219,7 +219,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     }
  
     // API Gateway
-    const api = new apiGateway.RestApi(this, 'api-stable-diffusion', {
+    const api = new apiGateway.RestApi(this, 'api-storytime', {
       description: 'API Gateway',
       endpointTypes: [apiGateway.EndpointType.REGIONAL],
       deployOptions: {
@@ -228,8 +228,9 @@ export class CdkStorytimeStack extends cdk.Stack {
     });  
 
     // POST method
-    const text2image = api.root.addResource('text2image');
-    text2image.addMethod('POST', new apiGateway.LambdaIntegration(lambdaUpload, {
+    const resourceName = "upload";
+    const upload = api.root.addResource(resourceName);
+    upload.addMethod('POST', new apiGateway.LambdaIntegration(lambdaUpload, {
       passthroughBehavior: apiGateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
       requestTemplates: requestTemplates,
       credentialsRole: role,
@@ -248,7 +249,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       ]
     }); 
     new cdk.CfnOutput(this, 'apiUrl', {
-      value: api.url,
+      value: api.url+'upload',
       description: 'The url of API Gateway',
     }); 
   }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kyopark2014/simple-serverless-voicebookcreator-for-upload#readme",
   "dependencies": {
+    "content-disposition": "^0.5.4",
     "uuid": "^8.3.2"
   },
   "keywords": []
