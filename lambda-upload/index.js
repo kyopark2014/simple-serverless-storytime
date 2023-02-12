@@ -10,40 +10,43 @@ const bucketName = process.env.bucketName;
 
 exports.handler = async (event, context) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
-    // console.log('## EVENT: ' + JSON.stringify(event))
+    console.log('## EVENT: ' + JSON.stringify(event))
     
-    const body = Buffer.from(event["body-json"], "base64");
+    const body = Buffer.from(event["body"], "base64");
     console.log('## EVENT: ' + JSON.stringify(event.params));
-    console.log('## EVENT: ' + JSON.stringify(event.context));
+    const header = event['multiValueHeaders'];
+    console.log('header: ' + JSON.stringify(header));
+    
     
     const uuid = uuidv4();
     console.log('### start upload: ' + uuid);
 
     var contentType;
-    if(event.params.header['Content-Type']) {
-        contentType = event.params.header["Content-Type"];
+    if(header['Content-Type']) {
+        contentType = header["Content-Type"];
     } 
-    else if(event.params.header['content-type']) {
-        contentType = event.params.header["content-type"];
+    else if(header['content-type']) {
+        contentType = header["content-type"];
     }
     console.log('contentType = '+contentType); 
 
     var contentDisposition;
-    if(event.params.header['Content-Disposition']) {
-        contentDisposition = event.params.header["Content-Disposition"];  
+    if(header['Content-Disposition']) {
+        contentDisposition = header["Content-Disposition"];  
     } 
-    else if(event.params.header['content-disposition']) {
-        contentDisposition = event.params.header["content-disposition"];  
+    else if(header['content-disposition']) {
+        contentDisposition = header["content-disposition"];  
     }
     console.log('disposition = '+contentDisposition);
 
-    var filename = "";
+    var filename = "";/*
     if(contentDisposition) {
         filename = cd.parse(contentDisposition).parameters.filename;
     }
-    else {
+    else { */
         filename = uuid+'.jpeg';
-    }
+    //}
+    console.log('filename = '+filename);
     
     try {
         const destparams = {
@@ -52,7 +55,9 @@ exports.handler = async (event, context) => {
             Body: body,
             ContentType: contentType
         };
-        const {putResult} = await s3.putObject(destparams).promise(); 
+        
+        console.log('destparams: ' + JSON.stringify(destparams));
+        //const {putResult} = await s3.putObject(destparams).promise(); 
 
         console.log('### finish upload: ' + uuid);
     } catch (error) {

@@ -222,6 +222,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     const api = new apiGateway.RestApi(this, 'api-storytime', {
       description: 'API Gateway',
       endpointTypes: [apiGateway.EndpointType.REGIONAL],
+      binaryMediaTypes: ['image/*'], 
       deployOptions: {
         stageName: stage,
       },
@@ -237,7 +238,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       integrationResponses: [{
         statusCode: '200',
       }], 
-      proxy:false, 
+      proxy:true, 
     }), {
       methodResponses: [   // API Gateway sends to the client that called a method.
         {
@@ -252,5 +253,5 @@ export class CdkStorytimeStack extends cdk.Stack {
       value: api.url+'upload',
       description: 'The url of API Gateway',
     }); 
-  }
+  } 
 }
