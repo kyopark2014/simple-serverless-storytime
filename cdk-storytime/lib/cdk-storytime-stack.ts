@@ -215,5 +215,10 @@ export class CdkStorytimeStack extends cdk.Stack {
       originRequestPolicy: myOriginRequestPolicy,
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     });    
+
+    new cdk.CfnOutput(this, 'uploadUrl', {
+      value: distribution.domainName+'upload',
+      description: 'The url of file upload',
+    }); 
   } 
 }
