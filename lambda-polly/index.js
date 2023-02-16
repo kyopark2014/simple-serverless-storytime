@@ -38,26 +38,26 @@ exports.handler = async (event) => {
     console.log('text: '+text);
     console.log('### finish text extraction: ' + id);
 
-    console.log('### start polly: ' + id);
-    var polyParams = {
-        OutputFormat: "mp3",
-        OutputS3BucketName: bucket,
-        Text: text,
-        TextType: "text",
-        //VoiceId: "Joanna",  // adult women
-        VoiceId: "Ivy",  // child girl
-        // VoiceId: "Kevin", // child man
-        // VoiceId: "Matthew", // adul man
-        // Engine: 'standard',
-        Engine: 'neural',
-        // SampleRate: "22050",
-    }; 
-    
+    console.log('### start polly: ' + id);         
     let pollyResult, key;
     try {
-        pollyResult = await polly.startSpeechSynthesisTask(polyParams).promise();       
+        let polyParams = {
+            OutputFormat: "mp3",
+            OutputS3BucketName: bucket,
+            Text: text,
+            TextType: "text",
+            //VoiceId: "Joanna",  // adult women
+            VoiceId: "Ivy",  // child girl
+            // VoiceId: "Kevin", // child man
+            // VoiceId: "Matthew", // adul man
+            // Engine: 'standard',
+            Engine: 'neural',
+            // SampleRate: "22050",
+        };
 
+        pollyResult = await polly.startSpeechSynthesisTask(polyParams).promise();       
         console.log('pollyResult:', pollyResult);
+
         const pollyUrl = pollyResult.SynthesisTask.OutputUri;
         console.log('url: '+pollyUrl);
 
@@ -69,7 +69,7 @@ exports.handler = async (event) => {
         // delete messageQueue
         console.log('### delete messageQueue for ' + id);
         try {
-            var deleteParams = {
+            let deleteParams = {
                 QueueUrl: sqsPollyUrl,
                 ReceiptHandle: receiptHandle
             };
@@ -89,8 +89,8 @@ exports.handler = async (event) => {
     } 
     
     console.log('### start sns: ' + id);
-    var url = CDN+key
-    var snsParams = {
+    let url = CDN+key
+    let snsParams = {
         Subject: 'Get your voice book generated from '+name,
         Message: '('+id+') Link: '+url+'\n'+text,         
         TopicArn: topicArn
