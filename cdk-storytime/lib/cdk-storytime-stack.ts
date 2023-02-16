@@ -93,7 +93,6 @@ export class CdkStorytimeStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       environment: {
         sqsRekognitionUrl: queueRekognition.queueUrl,
-        topicArn: topic.topicArn,
         bucketName: s3Bucket.bucketName
       }
     });  
