@@ -62,16 +62,15 @@ exports.handler = async (event, context) => {
     }; 
     console.log('file info: ' + JSON.stringify(fileInfo));
     
-    let params = {
-        DelaySeconds: 10,
-        MessageAttributes: {},
-        MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
-        QueueUrl: sqsRekognitionUrl
-    };
-     
-    console.log('params: '+JSON.stringify(params));
-     
     try {
+        let params = {
+            DelaySeconds: 10,
+            MessageAttributes: {},
+            MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
+            QueueUrl: sqsRekognitionUrl
+        };         
+        console.log('params: '+JSON.stringify(params));
+
         let result = await sqs.sendMessage(params).promise();  
         console.log("result="+JSON.stringify(result));
     } catch (err) {

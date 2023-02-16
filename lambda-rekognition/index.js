@@ -1,5 +1,5 @@
 const aws = require('aws-sdk');
-var sqs = new aws.SQS({apiVersion: '2012-11-05'});
+let sqs = new aws.SQS({apiVersion: '2012-11-05'});
 
 const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
 const sqsPollyUrl= process.env.sqsPollyUrl;
@@ -11,33 +11,32 @@ exports.handler = async (event) => {
     const receiptHandle = event['Records'][0]['receiptHandle'];
     console.log('receiptHandle: '+receiptHandle);
     
-    const body = event['Records'][0]['body'];
+    const body = JSON.parse(event['Records'][0]['body']);
     console.log('body = '+body);
 
-    const obj = JSON.parse(body);
-    const id = obj.Id;
-    const bucket = obj.Bucket;
-    const key = obj.Key;
-    const name = obj.Name;
-
-    const rekognition = new aws.Rekognition();
-    const rekognitionParams = {
-        Image: {
-            S3Object: {
-                Bucket: bucket,
-                Name: key
-            },
-        },
-    }
-    console.log('rekognitionParams = '+JSON.stringify(rekognitionParams))
-
+    const id = body.Id;
+    const bucket = body.Bucket;
+    const key = body.Key;
+    const name = body.Name;
+    
     try {
+        const rekognition = new aws.Rekognition();
+        const rekognitionParams = {
+            Image: {
+                S3Object: {
+                    Bucket: bucket,
+                    Name: key
+                },
+            },
+        }
+        console.log('rekognitionParams = '+JSON.stringify(rekognitionParams))
+
         let data = await rekognition.detectText(rekognitionParams).promise();
         console.log('data: '+JSON.stringify(data));
         console.log('### finish rekognition: ' + id);
         
         try {
-            var deleteParams = {
+            let deleteParams = {
                 QueueUrl: sqsRekognitionUrl,
                 ReceiptHandle: receiptHandle
             };
@@ -54,24 +53,24 @@ exports.handler = async (event) => {
             console.log(err);
         } 
 
-        // push the Json file to to SQS 
-        var sqsParams = {
-            DelaySeconds: 10,
-            MessageAttributes: {},
-            MessageBody: JSON.stringify({
-                Id: id,
-                Bucket: bucket,
-                Key: key,
-                Name: name,
-                Data: JSON.stringify(data)
-            }),  
-            QueueUrl: sqsPollyUrl
-        };
-        
-        console.log('sqsParams: '+JSON.stringify(sqsParams));
-        console.log('### start sqs for rekognition: ' + id);
-        
+        // push the Json file to to SQS         
         try {
+            let sqsParams = {
+                DelaySeconds: 10,
+                MessageAttributes: {},
+                MessageBody: JSON.stringify({
+                    Id: id,
+                    Bucket: bucket,
+                    Key: key,
+                    Name: name,
+                    Data: JSON.stringify(data)
+                }),  
+                QueueUrl: sqsPollyUrl
+            };
+            
+            console.log('sqsParams: '+JSON.stringify(sqsParams));
+            console.log('### start sqs for rekognition: ' + id);
+            
             let result = await sqs.sendMessage(sqsParams).promise();   
             console.log('result:'+JSON.stringify(result));
             
@@ -82,7 +81,7 @@ exports.handler = async (event) => {
 
         const response = {
             statusCode: 200,
-        //    body: JSON.stringify(data)
+            body: JSON.stringify(data)
         };
         return response;
 
