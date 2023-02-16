@@ -47,12 +47,34 @@ else {
 }
 ```
 
+S3에 파일을 업로드합니다.
+
+```java
+const destparams = {
+    Bucket: bucketName, 
+    Key: filename,
+    Body: body,
+    ContentType: contentType
+};
+await s3.putObject(destparams).promise(); 
+```
+
+Queue에 file정보를 event로 넣습니다. 
+
 ```java
 const fileInfo = {
     Id: uuid,
     Bucket: bucketName, 
     Key: filename,
 }; 
+
+let params = {
+    DelaySeconds: 10,
+    MessageAttributes: {},
+    MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
+    QueueUrl: sqsRekognitionUrl
+};         
+await sqs.sendMessage(params).promise();  
 ```
 
 ## CDK로 배포 준비
