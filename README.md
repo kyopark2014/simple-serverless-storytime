@@ -59,7 +59,7 @@ new cdk.CfnOutput(this, 'distributionDomainName', {
   value: distribution.domainName,
   description: 'The domain name of the Distribution',
 });
-
+```
 
 푸쉬 알림을 보내기 위해 SNS를 생성합니다. 
 
