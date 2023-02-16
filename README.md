@@ -31,6 +31,181 @@
 
 
 
+
+## CDK로 배포 준비
+
+S3를 생성하고 CloudFront와 연결합니다. 
+
+```java
+const s3Bucket = new s3.Bucket(this, "storage",{
+    // bucketName: bucketName,
+    blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+    removalPolicy: cdk.RemovalPolicy.DESTROY,
+    autoDeleteObjects: true,
+    publicReadAccess: false,
+    versioned: false,
+});
+
+const distribution = new cloudFront.Distribution(this, 'cloudfront', {
+  defaultBehavior: {
+    origin: new origins.S3Origin(s3Bucket),
+    allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,
+    cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
+    viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+  },
+  priceClass: cloudFront.PriceClass.PRICE_CLASS_200,  
+});
+new cdk.CfnOutput(this, 'distributionDomainName', {
+  value: distribution.domainName,
+  description: 'The domain name of the Distribution',
+});
+
+
+푸쉬 알림을 보내기 위해 SNS를 생성합니다. 
+
+```java
+const topic = new sns.Topic(this, 'SNS', {
+  topicName: 'sns'
+});
+topic.addSubscription(new subscriptions.EmailSubscription(email));
+new cdk.CfnOutput(this, 'snsTopicArn', {
+  value: topic.topicArn,
+  description: 'The arn of the SNS topic',
+});
+```
+
+아래와 같이 Rekognition과 Polly를 위한 SQS를 정의합니다.
+```java
+const queueRekognition = new sqs.Queue(this, 'QueueRekognition', {
+  queueName: "queue-rekognition",
+});
+
+const queuePolly = new sqs.Queue(this, 'QueuePolly', {
+  queueName: "queue-polly",
+});
+```
+
+
+파일 업로드를 처리하는 lambda를 생성하고 SQS와 S3에 대한 퍼미션을 부여합니다. 
+
+```java
+const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
+  runtime: lambda.Runtime.NODEJS_16_X, 
+  functionName: "lambda-for-upload",
+  code: lambda.Code.fromAsset("../lambda-upload"), 
+  handler: "index.handler", 
+  timeout: cdk.Duration.seconds(10),
+  environment: {
+    sqsRekognitionUrl: queueRekognition.queueUrl,
+    topicArn: topic.topicArn,
+    bucketName: s3Bucket.bucketName
+  }
+});  
+queueRekognition.grantSendMessages(lambdaUpload);
+s3Bucket.grantReadWrite(lambdaUpload);
+```
+
+Rekognition에 텍스트 추출을 의뢰하는 Lambda를 정의합니다. 
+
+```java
+const lambdaRekognition = new lambda.Function(this, "LambdaRekognition", {
+  runtime: lambda.Runtime.NODEJS_16_X, 
+  functionName: "lambda-for-rekognition",
+  code: lambda.Code.fromAsset("../lambda-rekognition"), 
+  handler: "index.handler", 
+  timeout: cdk.Duration.seconds(10),
+  environment: {
+    sqsRekognitionUrl: queueRekognition.queueUrl,
+    sqsPollyUrl: queuePolly.queueUrl,
+  }
+});   
+lambdaRekognition.addEventSource(new SqsEventSource(queueRekognition)); 
+queuePolly.grantSendMessages(lambdaRekognition);
+s3Bucket.grantRead(lambdaRekognition);
+
+const RekognitionPolicy = new iam.PolicyStatement({  // rekognition policy
+  actions: ['rekognition:*'],
+  resources: ['*'],
+});
+lambdaRekognition.role?.attachInlinePolicy(
+  new iam.Policy(this, 'rekognition-policy', {
+    statements: [RekognitionPolicy],
+  }),
+);
+```
+
+Poly에 텍스트를 보이스로 변환하도록 요청하는 Lambda를 생성합니다.
+
+```java
+const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
+  runtime: lambda.Runtime.NODEJS_16_X, 
+  functionName: "lambda-for-poly",
+  code: lambda.Code.fromAsset("../lambda-polly"), 
+  handler: "index.handler", 
+  timeout: cdk.Duration.seconds(10),
+  environment: {
+    CDN: 'https://'+distribution.domainName+'/',
+    sqsPollyUrl: queuePolly.queueUrl,
+    topicArn: topic.topicArn
+  }
+}); 
+lambdaPolly.addEventSource(new SqsEventSource(queuePolly)); 
+topic.grantPublish(lambdaPolly);
+s3Bucket.grantWrite(lambdaPolly);
+
+const PollyPolicy = new iam.PolicyStatement({  // poloy policy
+  actions: ['polly:*'],
+  resources: ['*'],
+});
+lambdaPolly.role?.attachInlinePolicy(
+  new iam.Policy(this, 'polly-policy', {
+    statements: [PollyPolicy],
+  }),
+);
+```
+
+API Gateway를 통해 외부에서 요청을 받습니다. 이때 요청(request)의 body에 있는 이미지 파일을 API Gateway로 처리할때는 proxy를 사용하였습니다. 
+
+```java
+const stage = "dev";
+
+const api = new apiGateway.RestApi(this, 'api-storytime', {
+  description: 'API Gateway',
+  endpointTypes: [apiGateway.EndpointType.REGIONAL],
+  binaryMediaTypes: ['image/*'], 
+  deployOptions: {
+    stageName: stage,
+  },
+});  
+
+// POST method
+const resourceName = "upload";
+const upload = api.root.addResource(resourceName);
+upload.addMethod('POST', new apiGateway.LambdaIntegration(lambdaUpload, {
+  passthroughBehavior: apiGateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+  credentialsRole: role,
+  integrationResponses: [{
+    statusCode: '200',
+  }], 
+  proxy:true, 
+}), {
+  methodResponses: [   // API Gateway sends to the client that called a method.
+    {
+      statusCode: '200',
+      responseModels: {
+        'application/json': apiGateway.Model.EMPTY_MODEL,
+      }, 
+    }
+  ]
+}); 
+new cdk.CfnOutput(this, 'apiUrl', {
+  value: api.url+'upload',
+  description: 'The url of API Gateway',
+});
+```
+
+
+
 ## 왜 이런 Architecture를 선택했는가?
 
 #### Why Event Driven?
