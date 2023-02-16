@@ -200,5 +200,20 @@ export class CdkStorytimeStack extends cdk.Stack {
       value: api.url+'upload',
       description: 'The url of API Gateway',
     }); 
+
+    // register api gateway into cloudfront 
+    const myOriginRequestPolicy = new cloudFront.OriginRequestPolicy(this, 'OriginRequestPolicyCloudfront', {
+      originRequestPolicyName: 'QueryStringPolicyCloudfront',
+      comment: 'Query string policy for cloudfront',
+      cookieBehavior: cloudFront.OriginRequestCookieBehavior.none(),
+      headerBehavior: cloudFront.OriginRequestHeaderBehavior.none(),
+      queryStringBehavior: cloudFront.OriginRequestQueryStringBehavior.allowList('deviceid'),
+    });
+
+    distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
+      cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
+      originRequestPolicy: myOriginRequestPolicy,
+      viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    });    
   } 
 }
