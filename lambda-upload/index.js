@@ -16,8 +16,7 @@ exports.handler = async (event, context) => {
     console.log('## EVENT: ' + JSON.stringify(event.params));
     const header = event['multiValueHeaders'];
     console.log('header: ' + JSON.stringify(header));
-    
-    
+        
     const uuid = uuidv4();
     console.log('### start upload: ' + uuid);
 
@@ -25,27 +24,21 @@ exports.handler = async (event, context) => {
     if(header['Content-Type']) {
         contentType = header["Content-Type"];
     } 
-    else if(header['content-type']) {
-        contentType = header["content-type"];
-    }
     console.log('contentType = '+contentType); 
 
     var contentDisposition;
     if(header['Content-Disposition']) {
         contentDisposition = header["Content-Disposition"];  
     } 
-    else if(header['content-disposition']) {
-        contentDisposition = header["content-disposition"];  
-    }
     console.log('disposition = '+contentDisposition);
 
-    var filename = "";/*
+    var filename = "";
     if(contentDisposition) {
         filename = cd.parse(contentDisposition).parameters.filename;
     }
-    else { */
+    else { 
         filename = uuid+'.jpeg';
-    //}
+    }
     console.log('filename = '+filename);
     
     try {
@@ -57,7 +50,7 @@ exports.handler = async (event, context) => {
         };
         
         console.log('destparams: ' + JSON.stringify(destparams));
-        //const {putResult} = await s3.putObject(destparams).promise(); 
+        const {putResult} = await s3.putObject(destparams).promise(); 
 
         console.log('### finish upload: ' + uuid);
     } catch (error) {
@@ -71,7 +64,6 @@ exports.handler = async (event, context) => {
         Key: filename,
     }; 
     console.log('file info: ' + JSON.stringify(fileInfo));
-
     
     var params = {
         DelaySeconds: 10,
