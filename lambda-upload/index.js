@@ -9,34 +9,31 @@ const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
 const bucketName = process.env.bucketName;
 
 exports.handler = async (event, context) => {
-    console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
-    console.log('## EVENT: ' + JSON.stringify(event))
+    // console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
+    // console.log('## EVENT: ' + JSON.stringify(event))
     
     const body = Buffer.from(event["body"], "base64");
-    console.log('## EVENT: ' + JSON.stringify(event.params));
     const header = event['multiValueHeaders'];
     console.log('header: ' + JSON.stringify(header));
-        
-    const uuid = uuidv4();
-    console.log('### start upload: ' + uuid);
-
-    var contentType;
+            
+    let contentType;
     if(header['Content-Type']) {
         contentType = header["Content-Type"];
     } 
     console.log('contentType = '+contentType); 
 
-    var contentDisposition;
+    let contentDisposition;
     if(header['Content-Disposition']) {
         contentDisposition = header["Content-Disposition"];  
     } 
     console.log('disposition = '+contentDisposition);
 
-    var filename = "";
+    let filename = "";
     if(contentDisposition) {
         filename = cd.parse(contentDisposition).parameters.filename;
     }
     else { 
+        const uuid = uuidv4();
         filename = uuid+'.jpeg';
     }
     console.log('filename = '+filename);
@@ -65,7 +62,7 @@ exports.handler = async (event, context) => {
     }; 
     console.log('file info: ' + JSON.stringify(fileInfo));
     
-    var params = {
+    let params = {
         DelaySeconds: 10,
         MessageAttributes: {},
         MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
