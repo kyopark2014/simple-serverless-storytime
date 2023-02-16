@@ -18,19 +18,18 @@ exports.handler = async (event) => {
     const receiptHandle = event['Records'][0]['receiptHandle'];
     console.log('receiptHandle: '+receiptHandle);
 
-    const body = event['Records'][0]['body'];
+    const body = JSON.parse(event['Records'][0]['body']);
     console.log('body = '+body);
 
-    const obj = JSON.parse(body);
-    const id = obj.Id;
-    const bucket = obj.Bucket;
-    const name = obj.Name;
+    const id = body.Id;
+    const bucket = body.Bucket;
+    const name = body.Name;
     
     console.log('### start text extraction: ' + id);
     // text extraction without post processing
-    const data = JSON.parse(obj.Data);
-    var text = "";
-    for (var i = 0; i < data.TextDetections.length; i++) {
+    const data = JSON.parse(body.Data);
+    let text = "";
+    for (let i = 0; i < data.TextDetections.length; i++) {
         if(data.TextDetections[i].Type == 'LINE') {
             text += data.TextDetections[i].DetectedText;
         }
@@ -89,17 +88,17 @@ exports.handler = async (event) => {
     } 
     
     console.log('### start sns: ' + id);
-    let url = CDN+key
-    let snsParams = {
-        Subject: 'Get your voice book generated from '+name,
-        Message: '('+id+') Link: '+url+'\n'+text,         
-        TopicArn: topicArn
-    }; 
-    console.log('snsParams: '+JSON.stringify(snsParams));
     
-    let snsResult;
     try {
-        snsResult = await sns.publish(snsParams).promise();
+        let url = CDN+key
+        let snsParams = {
+            Subject: 'Get your voice book generated from '+name,
+            Message: '('+id+') Link: '+url+'\n'+text,         
+            TopicArn: topicArn
+        }; 
+        console.log('snsParams: '+JSON.stringify(snsParams));
+        
+        const snsResult = await sns.publish(snsParams).promise();
         console.log('snsResult:', snsResult);
 
         console.log('### finish sns: ' + id);
