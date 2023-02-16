@@ -77,6 +77,47 @@ let params = {
 await sqs.sendMessage(params).promise();  
 ```
 
+## Rekognition에 요청하는 Lambda 구현
+
+Lambda로 들어오는 event에서 bucket 이름과 key를 추출하여 아래처럼 Rekognition에 text 추출을 요청합니다. 
+
+```java
+const body = JSON.parse(event['Records'][0]['body']);
+const bucket = body.Bucket;
+const key = body.Key;
+
+const rekognition = new aws.Rekognition();
+const rekognitionParams = {
+    Image: {
+        S3Object: {
+            Bucket: bucket,
+            Name: key
+        },
+    },
+}
+let data = await rekognition.detectText(rekognitionParams).promise();
+```
+
+이미지 추출 결과를 SQS에 저장합니다. 
+
+```java
+let sqsParams = {
+    DelaySeconds: 10,
+    MessageAttributes: {},
+    MessageBody: JSON.stringify({
+        Id: id,
+        Bucket: bucket,
+        Key: key,
+        Name: name,
+        Data: JSON.stringify(data)
+    }),  
+    QueueUrl: sqsPollyUrl
+};
+await sqs.sendMessage(sqsParams).promise();   
+```
+
+
+
 ## CDK로 배포 준비
 
 S3를 생성하고 CloudFront와 연결합니다. 
