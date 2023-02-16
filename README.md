@@ -116,7 +116,53 @@ let sqsParams = {
 await sqs.sendMessage(sqsParams).promise();   
 ```
 
+## Polly에 보이스로 변환 요청하는 Lambda 구현
 
+Lambda의 event로부터 text를 추출합니다. 
+
+```java
+const body = JSON.parse(event['Records'][0]['body']);
+const data = JSON.parse(body.Data);
+let text = "";
+for (let i = 0; i < data.TextDetections.length; i++) {
+    if(data.TextDetections[i].Type == 'LINE') {
+        text += data.TextDetections[i].DetectedText;
+    }
+}
+```
+
+Polly에 오디오변환 요청을 하고 결과에서 key 값을 추출합니다. 
+
+```java
+let polyParams = {
+    OutputFormat: "mp3",
+    OutputS3BucketName: bucket,
+    Text: text,
+    TextType: "text",
+    VoiceId: "Ivy",  // child girl
+    Engine: 'neural',
+};
+
+pollyResult = await polly.startSpeechSynthesisTask(polyParams).promise();       
+const pollyUrl = pollyResult.SynthesisTask.OutputUri;
+const fileInfo = path.parse(pollyUrl);
+key = fileInfo.name + fileInfo.ext;
+```
+
+SNS에 결과를 전달하도록 요청합니다.
+
+```java
+const CDN = process.env.CDN; 
+const topicArn = process.env.topicArn;
+
+let url = CDN+key
+let snsParams = {
+    Subject: 'Get your voice book generated from '+name,
+    Message: '('+id+') Link: '+url+'\n'+text,         
+    TopicArn: topicArn
+}; 
+await sns.publish(snsParams).promise();
+```
 
 ## CDK로 배포 준비
 
