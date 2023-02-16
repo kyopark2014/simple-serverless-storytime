@@ -30,7 +30,30 @@
 ![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
 
+## 파일을 업로드하는 Lambda 함수 구현
 
+event로 부터 이미지 데이터와 파일이름을 추출합니다.
+
+```java
+const body = Buffer.from(event["body"], "base64");
+const header = event['multiValueHeaders'];
+
+if(contentDisposition) {
+    filename = cd.parse(contentDisposition).parameters.filename;
+}
+else { 
+    const uuid = uuidv4();
+    filename = uuid+'.jpeg';
+}
+```
+
+```java
+const fileInfo = {
+    Id: uuid,
+    Bucket: bucketName, 
+    Key: filename,
+}; 
+```
 
 ## CDK로 배포 준비
 
