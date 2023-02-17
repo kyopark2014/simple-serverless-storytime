@@ -400,6 +400,13 @@ npm install aws-cdk-lib
 cdk deply
 ```
 
+#### 이메일 설정
+
+![noname](https://user-images.githubusercontent.com/52392004/219817649-108b5c81-8460-49e3-a4bd-9af1dd5b091b.png)
+
+
+![image](https://user-images.githubusercontent.com/52392004/219817543-7741bdae-8fc7-45bf-a280-62db09185348.png)
+
 
 ## 실행결과
 
