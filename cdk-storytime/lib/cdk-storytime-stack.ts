@@ -82,8 +82,8 @@ export class CdkStorytimeStack extends cdk.Stack {
         origin: new origins.S3Origin(s3Bucket),
         allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,
         cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
-        // viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
+        viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        //viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
       },
       priceClass: cloudFront.PriceClass.PRICE_CLASS_200,  
     });
@@ -179,7 +179,7 @@ export class CdkStorytimeStack extends cdk.Stack {
  
     // logging
     const logGroup = new logs.LogGroup(this, 'AccessLogs', {
-      logGroupName: `/aws/api-gateway/stable-diffusion`, 
+      logGroupName: `/aws/api-gateway/storytime`, 
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
@@ -237,8 +237,9 @@ export class CdkStorytimeStack extends cdk.Stack {
     distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
       cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
       originRequestPolicy: myOriginRequestPolicy,
-      //viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
+      allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
+      viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      //viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,          
     });    
 
     new cdk.CfnOutput(this, 'uploadUrl', {
