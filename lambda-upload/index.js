@@ -13,8 +13,7 @@ exports.handler = async (event, context) => {
     //console.log('## EVENT: ' + JSON.stringify(event))
     
     const body = Buffer.from(event["body"], "base64");
-    //console.log('body: ' + body)
-    //const body =Buffer.from(event['body']).toString('base64');
+    console.log('body: ' + body)
     const header = event['multiValueHeaders'];
     console.log('header: ' + JSON.stringify(header));
             

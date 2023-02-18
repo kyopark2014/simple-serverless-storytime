@@ -1,0 +1,53 @@
+<?php
+if (isset($_FILES['myFile'])) {
+    // Example:
+    move_uploaded_file($_FILES['myFile']['tmp_name'], "uploads/" . $_FILES['myFile']['name']);
+    exit;
+}
+?><!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>dnd binary upload</title>
+    <script type="application/javascript">
+        function sendFile(file) {
+            const uri = "https://d3cz06vcs2mo0q.cloudfront.net/upload";
+            const xhr = new XMLHttpRequest();
+            const fd = new FormData();
+
+            xhr.open("POST", uri, true);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert(xhr.responseText); // handle response.
+                }
+            };
+            fd.append('myFile', file);
+            // Initiate a multipart/form-data upload
+            xhr.send(fd);
+        }
+
+        window.onload = () => {
+            const dropzone = document.getElementById("dropzone");
+            dropzone.ondragover = dropzone.ondragenter = (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            dropzone.ondrop = (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+
+                const filesArray = event.dataTransfer.files;
+                for (let i=0; i<filesArray.length; i++) {
+                    sendFile(filesArray[i]);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <div id="dropzone" style="margin:30px; width:500px; height:300px; border:1px dotted grey;">Drag & drop your file here</div>
+    </div>
+</body>
+</html>
