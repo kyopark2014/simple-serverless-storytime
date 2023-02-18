@@ -12,7 +12,7 @@ exports.handler = async (event) => {
     console.log('receiptHandle: '+receiptHandle);
     
     const body = JSON.parse(event['Records'][0]['body']);
-    console.log('body = '+body);
+    console.log('body = '+JSON.stringify(body));
 
     const id = body.Id;
     const bucket = body.Bucket;
@@ -32,9 +32,20 @@ exports.handler = async (event) => {
         console.log('rekognitionParams = '+JSON.stringify(rekognitionParams))
 
         let data = await rekognition.detectText(rekognitionParams).promise();
-        console.log('data: '+JSON.stringify(data));
+        // console.log('data: '+JSON.stringify(data));
+        
+        // text extraction
+        let text = "";   
+        for (let i = 0; i < data.TextDetections.length; i++) {
+            if(data.TextDetections[i].Type == 'LINE') {
+                text += data.TextDetections[i].DetectedText;
+            }
+        }
+        console.log('text: ' + text);
+
         console.log('### finish rekognition: ' + id);
         
+        // delete the queue message
         try {
             let deleteParams = {
                 QueueUrl: sqsRekognitionUrl,
@@ -63,7 +74,7 @@ exports.handler = async (event) => {
                     Bucket: bucket,
                     Key: key,
                     Name: name,
-                    Data: JSON.stringify(data)
+                    Text: text
                 }),  
                 QueueUrl: sqsPollyUrl
             };

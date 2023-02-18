@@ -147,7 +147,8 @@ export class CdkStorytimeStack extends cdk.Stack {
       environment: {
         CDN: 'https://'+distribution.domainName+'/',
         sqsPollyUrl: queuePolly.queueUrl,
-        topicArn: topic.topicArn
+        topicArn: topic.topicArn,
+        bucketName: s3Bucket.bucketName
       }
     }); 
     lambdaPolly.addEventSource(new SqsEventSource(queuePolly)); 
@@ -195,19 +196,8 @@ export class CdkStorytimeStack extends cdk.Stack {
         
         loggingLevel: apiGateway.MethodLoggingLevel.INFO, 
         dataTraceEnabled: true,
-
-        accessLogDestination: new apiGateway.LogGroupLogDestination(logGroup),      
-        accessLogFormat: apiGateway.AccessLogFormat.jsonWithStandardFields({
-          caller: false,
-          httpMethod: true,
-          ip: true,
-          protocol: true,
-          requestTime: true,
-          resourcePath: true,
-          responseLength: true,
-          status: true,
-          user: true
-        }) 
+        accessLogDestination: new apiGateway.LogGroupLogDestination(logGroup),    
+        accessLogFormat: apiGateway.AccessLogFormat.jsonWithStandardFields()  
       },
     });  
 

@@ -19,23 +19,13 @@ exports.handler = async (event) => {
     console.log('receiptHandle: '+receiptHandle);
 
     const body = JSON.parse(event['Records'][0]['body']);
-    console.log('body = '+body);
+    console.log('body = ', JSON.stringify(body));
 
     const id = body.Id;
     const bucket = body.Bucket;
-    const name = body.Name;
-    
-    console.log('### start text extraction: ' + id);
-    // text extraction without post processing
-    const data = JSON.parse(body.Data);
-    let text = "";
-    for (let i = 0; i < data.TextDetections.length; i++) {
-        if(data.TextDetections[i].Type == 'LINE') {
-            text += data.TextDetections[i].DetectedText;
-        }
-    }
+    const name = body.Name;    
+    const text = body.Text;
     console.log('text: '+text);
-    console.log('### finish text extraction: ' + id);
 
     console.log('### start polly: ' + id);         
     let pollyResult, key;
@@ -48,7 +38,7 @@ exports.handler = async (event) => {
             //VoiceId: "Joanna",  // adult women
             VoiceId: "Ivy",  // child girl
             // VoiceId: "Kevin", // child man
-            // VoiceId: "Matthew", // adul man
+            // VoiceId: "Matthew", // adult man
             // Engine: 'standard',
             Engine: 'neural',
             // SampleRate: "22050",
@@ -87,10 +77,9 @@ exports.handler = async (event) => {
         console.log(err);
     } 
     
-    console.log('### start sns: ' + id);
-    
-    try {
-        let url = CDN+key
+    console.log('### start sns: ' + id);        
+    let url = CDN+key;
+    try {        
         let snsParams = {
             Subject: 'Get your voice book generated from '+name,
             Message: '('+id+') Link: '+url+'\n'+text,         
