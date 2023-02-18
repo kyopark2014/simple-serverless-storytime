@@ -23,7 +23,7 @@ exports.handler = async (event) => {
 
     const id = body.Id;
     const bucket = body.Bucket;
-    const name = body.key;    
+    const name = body.Key;    
     const text = body.Text;
     console.log('text: '+text);
 
