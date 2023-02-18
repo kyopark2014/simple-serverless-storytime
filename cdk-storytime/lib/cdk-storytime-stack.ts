@@ -178,7 +178,7 @@ export class CdkStorytimeStack extends cdk.Stack {
  
     // access log
     const logGroup = new logs.LogGroup(this, 'AccessLogs', {
-      logGroupName: `/aws/api-gateway/storytime`, 
+      logGroupName: `/aws/api-gateway/accesslog-storytime`, 
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
