@@ -11,7 +11,8 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import {SqsEventSource} from 'aws-cdk-lib/aws-lambda-event-sources';
-import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment"
+import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
+import * as logs from "aws-cdk-lib/aws-logs"
 
 const stage = "dev";
 const email = "storytimebot21@gmail.com";
@@ -99,6 +100,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       code: lambda.Code.fromAsset("../lambda-upload"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_DAY,
       environment: {
         sqsRekognitionUrl: queueRekognition.queueUrl,
         bucketName: s3Bucket.bucketName
@@ -114,6 +116,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       code: lambda.Code.fromAsset("../lambda-rekognition"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_DAY,
       environment: {
         sqsRekognitionUrl: queueRekognition.queueUrl,
         sqsPollyUrl: queuePolly.queueUrl,
@@ -140,6 +143,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       code: lambda.Code.fromAsset("../lambda-polly"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_DAY,
       environment: {
         CDN: 'https://'+distribution.domainName+'/',
         sqsPollyUrl: queuePolly.queueUrl,
@@ -173,15 +177,41 @@ export class CdkStorytimeStack extends cdk.Stack {
       managedPolicyArn: 'arn:aws:iam::aws:policy/AWSLambdaExecute',
     }); 
  
+    // logging
+    const logGroup = new logs.LogGroup(this, 'AccessLogs', {
+      logGroupName: `/aws/api-gateway/stable-diffusion`, 
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
+    logGroup.grantWrite(new iam.ServicePrincipal('apigateway.amazonaws.com')); 
+    
     // API Gateway
     const api = new apiGateway.RestApi(this, 'api-storytime', {
       description: 'API Gateway',
       endpointTypes: [apiGateway.EndpointType.REGIONAL],
-    //  binaryMediaTypes: ['image/*'], 
+      binaryMediaTypes: ['image/*'], 
       deployOptions: {
         stageName: stage,
+        
+        loggingLevel: apiGateway.MethodLoggingLevel.INFO, 
+        dataTraceEnabled: true,
+
+        accessLogDestination: new apiGateway.LogGroupLogDestination(logGroup),      
+        accessLogFormat: apiGateway.AccessLogFormat.jsonWithStandardFields({
+          caller: false,
+          httpMethod: true,
+          ip: true,
+          protocol: true,
+          requestTime: true,
+          resourcePath: true,
+          responseLength: true,
+          status: true,
+          user: true
+        }) 
       },
     });  
+
+
 
   /*  const templateString: string = `##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
     ##  This template will pass through all parameters including path, querystring, header, stage variables, and context through to the integration endpoint via the body/payload
