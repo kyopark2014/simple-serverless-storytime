@@ -83,7 +83,6 @@ export class CdkStorytimeStack extends cdk.Stack {
         allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,
         cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
         viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        //viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
       },
       priceClass: cloudFront.PriceClass.PRICE_CLASS_200,  
     });
@@ -177,7 +176,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       managedPolicyArn: 'arn:aws:iam::aws:policy/AWSLambdaExecute',
     }); 
  
-    // logging
+    // access log
     const logGroup = new logs.LogGroup(this, 'AccessLogs', {
       logGroupName: `/aws/api-gateway/storytime`, 
       retention: logs.RetentionDays.ONE_WEEK,
@@ -193,8 +192,11 @@ export class CdkStorytimeStack extends cdk.Stack {
       deployOptions: {
         stageName: stage,
         
+        // logging for debug
         loggingLevel: apiGateway.MethodLoggingLevel.INFO, 
         dataTraceEnabled: true,
+
+        // trace access log
         accessLogDestination: new apiGateway.LogGroupLogDestination(logGroup),    
         accessLogFormat: apiGateway.AccessLogFormat.jsonWithStandardFields()  
       },
@@ -239,7 +241,6 @@ export class CdkStorytimeStack extends cdk.Stack {
       originRequestPolicy: myOriginRequestPolicy,
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      //viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,          
     });    
 
     new cdk.CfnOutput(this, 'uploadUrl', {
