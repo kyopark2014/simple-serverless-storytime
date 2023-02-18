@@ -9,31 +9,34 @@ const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
 const bucketName = process.env.bucketName;
 
 exports.handler = async (event, context) => {
-    // console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
-    // console.log('## EVENT: ' + JSON.stringify(event))
+    //console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
+    //console.log('## EVENT: ' + JSON.stringify(event))
     
     const body = Buffer.from(event["body"], "base64");
+    //console.log('body: ' + body)
     const header = event['multiValueHeaders'];
     console.log('header: ' + JSON.stringify(header));
             
     let contentType;
     if(header['Content-Type']) {
-        contentType = header["Content-Type"];
+        contentType = String(header['Content-Type']);
     } 
     console.log('contentType = '+contentType); 
 
-    let contentDisposition;
+    let contentDisposition="";
     if(header['Content-Disposition']) {
-        contentDisposition = header["Content-Disposition"];  
+        contentDisposition = String(header['Content-Disposition']);  
     } 
     console.log('disposition = '+contentDisposition);
+    
 
     let filename = "";
+    const uuid = uuidv4();
+    
     if(contentDisposition) {
         filename = cd.parse(contentDisposition).parameters.filename;
     }
     else { 
-        const uuid = uuidv4();
         filename = uuid+'.jpeg';
     }
     console.log('filename = '+filename);
@@ -46,7 +49,7 @@ exports.handler = async (event, context) => {
             ContentType: contentType
         };
         
-        console.log('destparams: ' + JSON.stringify(destparams));
+      //  console.log('destparams: ' + JSON.stringify(destparams));
         const {putResult} = await s3.putObject(destparams).promise(); 
 
         console.log('### finish upload: ' + uuid);
