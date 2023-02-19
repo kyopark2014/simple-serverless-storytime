@@ -86,7 +86,7 @@ const destparams = {
 await s3.putObject(destparams).promise(); 
 ```
 
-SQS에 요청(Request) 정보를 event로 push 합니다. 
+업로드된 파일의 정보를 SQS 전송합니다. 이때 파일의 정보는 uuid로 만든 unique한 ID와 이미지 파일에 대한 bucket 이름 및 파일이름입니다. 
 
 ```java
 const fileInfo = {
@@ -106,10 +106,10 @@ await sqs.sendMessage(params).promise();
 
 ## Rekognition에 요청하는 Lambda 구현
 
-[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-rekognition/index.js)에서는 Rekognition을 이용하여 텍스트를 추출하고, SQS에 음성파일로 변환해야할 텍스트 정보를 전달합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-rekognition/index.js)에서는 Rekognition을 이용하여 텍스트를 추출하고, SQS에 음성파일로 변환해야 할 텍스트 정보를 전달합니다. 
 
 
-아래와 같이 Lambda로 들어오는 event에서 bucket 이름과 key를 추출하여 아래처럼 Rekognition에 text 추출을 요청합니다. 
+SQS로 부터 Lambda로 전달된 event에서 bucket 이름과 key를 추출하여 아래처럼 [Rekognition에 text 추출](https://docs.aws.amazon.com/ko_kr/rekognition/latest/dg/text-detection.html)을 요청합니다. 
 
 ```java
 const body = JSON.parse(event['Records'][0]['body']);
@@ -128,7 +128,7 @@ const rekognitionParams = {
 let data = await rekognition.detectText(rekognitionParams).promise();
 ```
 
-텍스트를 추출합니다.
+Rekognition이 전달한 text 정보는 위치 정보를 포함하고 있습니다. 이를 읽어주기 위해서는 아래와 같이 하나의 문장으로 변환하여야 합니다. 여기에서는 Rekognition이 LINE으로 분류한 text를 모아서 문장을 생성합니다.  
 
 ```java
 let text = "";   
@@ -139,7 +139,7 @@ for (let i = 0; i < data.TextDetections.length; i++) {
 }
 ```
 
-추출한 텍스트와 event 정보를 모아서 SQS에 push합니다. 
+Rekognition을 통해 추출한 문장과 이미지 파일에 대한 bucket 이름 및 key등을 아래와 같이 SQS에 전송합니다. 
 
 ```java
 let sqsParams = {
@@ -162,9 +162,9 @@ await sqs.sendMessage(sqsParams).promise();
 
 ## Polly에 보이스로 변환 요청하는 Lambda 구현
 
-[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 Polly에 음성파일로 변환을 요청하고, 사용자에게 전달해야할 결과를 SQS에 전송합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 이미지에서 추출한 문장을 Polly에 음성 파일로 변환을 요청하고, 결과를 사용자에게 보내기 위해서 SNS로 전송합니다. 
 
-아래와 같이 Lambda의 event로부터 text를 추출히야 Polly에 오디오변환 요청을 하고 결과에서 key 값을 추출합니다. 
+SQS로 부터 얻은 event에서 text와 bucket 이름을 추출하여 Polly 
 
 ```java
 const body = JSON.parse(event['Records'][0]['body'])
