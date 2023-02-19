@@ -417,29 +417,54 @@ Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교합니다
 
 
 
-## 배포하기
+## 직접 실습 해보기
 
-### AWS Console로 구현하기
+### Cloud9 생성
 
-[AWS Console로 구현하기](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/deployment-guide-console.md)에서는 각 컴포넌트를 AWS Console에서 구현합니다.
+Storytime을 위한 인프라 생성을 위해 Cloud9 개발환경을 이용합니다. AWS Cloud9을 활용하면 브라우저만으로 코드를 작성, 실행 및 디버깅을 쉽게 할 수 있으며, 배포(Deployment)를 위한 편리한 환경을 생성할 수 있습니다. 여기서는 편의상 한국리전을 사용합니다.
 
-### CDK로 배포하기
+Cloud9을 생성하기 위하여 [Cloud9 console](https://ap-northeast-2.console.aws.amazon.com/cloud9control/home?region=ap-northeast-2#/)로 진입하여 [Create environment]를 선택한 후에 아래처럼 Name을 입력합니다. 여기서는 "Storytime"이라고 입력하였습니다. 이후 나머지는 기본값을 유지하고 [Create]를 선택합니다.
+
+
+![noname](https://user-images.githubusercontent.com/52392004/219947047-51cd8be9-c3c1-4d69-9322-b6af1d5b335b.png)
+
+Cloud9이 생성되면 [Open]후 아래처럼 Terminal을 준비합니다. 
+
+
+![noname](https://user-images.githubusercontent.com/52392004/219947426-13156f52-4e08-437d-87d1-6ff0302a3d95.png)
+
+
+### CDK로 솔루션 배포하기
 
 Cloud9에서 CDK를 이용해 한번에 배포하는 과정을 설명합니다. 
 
-소스를 다운로드하고 해당 폴더로 이동합니다.
+아래와 같이 소스를 다운로드합니다.
 
 ```java
 git clone https://github.com/kyopark2014/simple-serverless-storytime
-cd simple-serverless-storytime/cdk-storytime 
 ```
 
-필요한 라이브러리를 설치하고 CDK로 전체 인프라를 설치합니다.
+CDK 폴더로 이동하여 필요한 라이브러리를 설치합니다. 여기에서는 CDK2.0에서 v2.64.0을 사용하고 있습니다. 
 
 ```java
-npm install aws-cdk-lib
+cd simple-serverless-storytime/cdk-storytime && npm install aws-cdk-lib@2.64.0
+```
+
+CDK로 전체 인프라를 설치합니다.
+
+```java
 cdk deply
 ```
+
+정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUr은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
+
+
+
+![noname](https://user-images.githubusercontent.com/52392004/219947952-5c0a8b3c-164e-48fd-bf4a-7d78d4f27fe2.png)
+
+
+
+
 
 #### 이메일 설정
 
