@@ -1,11 +1,70 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <form action="https://d1kpgkk8y8p43t.cloudfront.net/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="profile">
-            <input type="submit">
+<?php
+if (isset($_FILES['myFile'])) {
+    // Example:
+    move_uploaded_file($_FILES['myFile']['tmp_name'], "uploads/" . $_FILES['myFile']['name']);
+    exit;
+}
+?><!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>dnd binary upload</title>
+    <script type="application/javascript">
+        function sendFile(file) {
+            const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
+            const xhr = new XMLHttpRequest();
+            //const fd = new FormData();
+
+            xhr.open("POST", uri, true);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert(xhr.responseText); // handle response.
+                }
+            };
+            //fd.append('myFile', file);
+            // Initiate a multipart/form-data upload
+            //xhr.send(file);
+
+
+            var blob = new Blob([file], {type: 'image/jpeg'});
+
+            xhr.send(blob);
+        }
+
+        window.onload = () => {
+            var form = document.forms.myform;
+            form.elements.button.onclick = function(){
+                var file = form.elements.filename.files[0];
+                if(file){
+                    sendFile(file);
+                }else{
+                    alert("Not file.");
+                }
+            };
+        /*    const dropzone = document.getElementById("dropzone");
+            dropzone.ondragover = dropzone.ondragenter = (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            dropzone.ondrop = (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+
+                const filesArray = event.dataTransfer.files;
+                for (let i=0; i<filesArray.length; i++) {
+                    sendFile(filesArray[i]);
+                }
+            } */
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <form id="myform">Drag & drop your file here
+            <input type="file" name="filename">
+            <input type="button" name="button" value="Send">
         </form>
-    </body>
+    </div>
+</body>
 </html>
