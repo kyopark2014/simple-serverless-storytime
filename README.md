@@ -33,9 +33,11 @@
 단계 10: 사용자는 이메일의 링크를 선택하여 음성파일을 들을 수 있습니다. 
 
 
-상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
 
-![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
+[Sequence Diagram](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)을 참고합니다.
+
+
+
 
 
 ## 이미지에서 텍스트를 추출
