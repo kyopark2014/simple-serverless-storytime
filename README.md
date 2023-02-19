@@ -504,7 +504,7 @@ aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6v
 
 ### 실행하기 
 
-로컬 PC에서 [sample.jpeg](https://raw.githubusercontent.com/kyopark2014/simple-serverless-storytime/main/sample.jpeg)을 다운로드 합니다. 이후 웹브라우저를 열어서 CDK 배포시 얻은 UploadUrl로 접속합니다. 여기서는 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 로 접속합니다. 아래와 같이 [Choose File] 버튼을 선택하여 sample.jpeg을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 
+로컬 PC에서 [sample.jpeg](https://raw.githubusercontent.com/kyopark2014/simple-serverless-storytime/main/sample.jpeg)을 다운로드 합니다. 이후 웹브라우저를 열어서 CDK 배포시 얻은 UploadUrl로 접속합니다. 여기서는 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 로 접속합니다. 아래와 같이 [Choose File] 버튼을 선택하여 sample.jpeg을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 업로드된 그림에서 아래의 text 영역을 음성으로 변환하고자 합니다.
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922550-19eb73f5-ff9f-4dce-96c7-95bb64248c36.png)
 
