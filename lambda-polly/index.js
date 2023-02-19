@@ -30,7 +30,7 @@ exports.handler = async (event) => {
     console.log('### start polly: ' + id);         
     let pollyResult, key;
     try {
-        let polyParams = {
+        let pollyParams = {
             OutputFormat: "mp3",
             OutputS3BucketName: bucket,
             Text: text,
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
             // SampleRate: "22050",
         };
 
-        pollyResult = await polly.startSpeechSynthesisTask(polyParams).promise();       
+        pollyResult = await polly.startSpeechSynthesisTask(pollyParams).promise();       
         console.log('pollyResult:', pollyResult);
 
         const pollyUrl = pollyResult.SynthesisTask.OutputUri;
