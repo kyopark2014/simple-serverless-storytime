@@ -486,19 +486,14 @@ CDK 라이브러리에 등록한 이메일 주소로 전달된 Confirmation 메�
 
 
 
-#### Web Browser에서 실행하기 
+### 실행하기 
 
-웹브라우저를 
-웹브라우저를 열어서 
-UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고,
-
-
-아래와 같이 [Choose File]버튼을 선택하여 [sample.jpeg](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/sample.jpeg)을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 
+로컬 PC에서 [sample.jpeg](https://raw.githubusercontent.com/kyopark2014/simple-serverless-storytime/main/sample.jpeg)을 다운로드 합니다. 이후 웹브라우저를 열어서 CDK 배포시 얻은 UploadUrl로 접속합니다. 여기서는 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"로 접속합니다. 아래와 같이 [Choose File]버튼을 선택하여 [sample.jpeg](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/sample.jpeg)을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922550-19eb73f5-ff9f-4dce-96c7-95bb64248c36.png)
 
 
-## 실행결과
+### 실행결과
 
 파일을 업로드 한 후에 수십 초가 지나면 아래와 같이 등록한 이메일로 결과가 전달됩니다. Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니다. Link 아래에는 추출된 텍스트 정보가 전달됩니다. 
 
@@ -507,9 +502,9 @@ UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고,
 [Sample.jpeg에 대한 결과](https://raw.githubusercontent.com/kyopark2014/simple-serverless-storytime/main/sample-result.mp3)를 선택해서 생성된 MP3를 확인할 수 있습니다. 
 
 
-## 정리하기 
+## 리소스 정리하기 
 
-서버를 더이상 사용하지 않는 경우에 삭제 방법에 대해 기술합니다. 
+서버를 더이상 사용하지 않는 경우에 아래처럼 모든 리소스를 삭제합니다. 
 
 ```java
 cdk destroy
