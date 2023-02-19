@@ -444,7 +444,12 @@ Cloud9에서 CDK를 이용해 한번에 배포하는 과정을 설명합니다.
 git clone https://github.com/kyopark2014/simple-serverless-storytime
 ```
 
-CDK 폴더로 이동하여 필요한 라이브러리를 설치합니다. 여기에서는 CDK2.0에서 v2.64.0을 사용하고 있습니다. 
+아래와 같이 "cdk-storytime/lib/cdk-storytime-stack.ts"을 열어서, email 주소를 업데이트 합니다.
+
+![noname](https://user-images.githubusercontent.com/52392004/219948651-c724d298-aac6-427c-b072-5ed6edea6fcb.png)
+
+
+다시 터미널로 돌아가서, CDK 폴더로 이동한 후에 CDK 2.0을 설치합니다. 여기에서는 CDK2.0에서 v2.64.0을 사용하고 있습니다. 
 
 ```java
 cd simple-serverless-storytime/cdk-storytime && npm install aws-cdk-lib@2.64.0
@@ -456,22 +461,32 @@ CDK로 전체 인프라를 설치합니다.
 cdk deply
 ```
 
-정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUr은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
-
-
+정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219947952-5c0a8b3c-164e-48fd-bf4a-7d78d4f27fe2.png)
 
 
+아래와 같이 "html/upload.html"을 오픈하여 url으로 상기의 UploadUrl 정보로 업데이트 합니다. 
 
+![noname](https://user-images.githubusercontent.com/52392004/219948314-514d5c3c-8e9e-4682-9bdc-a41c00d381a4.png)
 
+이제 수정한 upload.html 파일을 S3 bucket에 복사합니다. 
 
-#### 이메일 설정
+```java
+cd .. && aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc
+```
+
+CDK 라이브러리에 등록한 
+
 
 ![noname](https://user-images.githubusercontent.com/52392004/219817649-108b5c81-8460-49e3-a4bd-9af1dd5b091b.png)
 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219817719-ea749a1a-1b90-406b-94e0-6c28eddb928e.png)
+
+
+
+
 
 #### Curl로 실행하기
 
