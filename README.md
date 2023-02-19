@@ -202,7 +202,7 @@ await sns.publish(snsParams).promise();
 
 ### AWS CDK로 리소스 생성 코드 준비
 
-AWS 리소스를 효과적으로 배포하기 위하여 IaC 툴인 CDK를 이용해 배포하고자 합니다. 여기서 CDK는 Typescript를 이용해 구현합니다. 
+AWS 리소스를 효과적으로 배포하기 위하여 [IaC 툴](https://en.wikipedia.org/wiki/Infrastructure_as_code)인 CDK를 이용해 배포하고자 합니다. 여기서 CDK는 Typescript를 이용해 구현합니다. 
 
 S3를 생성하고 CloudFront와 연결합니다. 
 
@@ -227,7 +227,7 @@ const distribution = new cloudFront.Distribution(this, 'cloudfront', {
 });
 ```
 
-푸쉬 알림을 보내기 위해 SNS를 생성합니다. 
+결과를 사용자에게 전달하기 위하여 SNS를 생성합니다. 
 
 ```java
 const topic = new sns.Topic(this, 'SNS', {
@@ -236,7 +236,7 @@ const topic = new sns.Topic(this, 'SNS', {
 topic.addSubscription(new subscriptions.EmailSubscription(email));
 ```
 
-아래와 같이 Rekognition과 Polly를 위한 SQS를 정의합니다.
+Rekognition과 Polly를 위한 SQS를 정의합니다.
 ```java
 const queueRekognition = new sqs.Queue(this, 'QueueRekognition', {
   queueName: "queue-rekognition",
@@ -295,7 +295,7 @@ lambdaRekognition.role?.attachInlinePolicy(
 );
 ```
 
-텍스트를 음성파일로 변환하도록 Polly에 요청하는 Lambda를 생성합니다.
+텍스트를 음성파일로 변환하도록 Polly에 요청하는 Lambda를 생성합니다. 이때 Lambda가 Polly를 사용할 수 있도록 퍼미션을 추가합니다. 
 
 ```java
 const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
@@ -315,7 +315,7 @@ lambdaPolly.addEventSource(new SqsEventSource(queuePolly));
 topic.grantPublish(lambdaPolly);
 s3Bucket.grantWrite(lambdaPolly);
 
-const PollyPolicy = new iam.PolicyStatement({  // poloy policy
+const PollyPolicy = new iam.PolicyStatement({  // polloy policy
   actions: ['polly:*'],
   resources: ['*'],
 });
