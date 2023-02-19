@@ -249,11 +249,6 @@ export class CdkStorytimeStack extends cdk.Stack {
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     });    
 
-    new cdk.CfnOutput(this, 'ApiGatewayUrlForCloudFront', {
-      value: 'https://'+distribution.domainName+'/upload.html',
-      description: 'The endpoint of API Gateway for upload',
-    });
-
     new cdk.CfnOutput(this, 'UploadUrl', {
       value: 'https://'+distribution.domainName+'/upload.html',
       description: 'The url of file upload',
