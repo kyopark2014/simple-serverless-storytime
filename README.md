@@ -407,6 +407,15 @@ cdk deply
 
 ![noname](https://user-images.githubusercontent.com/52392004/219817719-ea749a1a-1b90-406b-94e0-6c28eddb928e.png)
 
+#### Curl로 실행하기
+
+#### Web Browser에서 실행하기 
+
+아래와 같이 [Choose File]버튼을 선택하여 [sample.jpeg](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/sample.jpeg)을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 
+
+![noname](https://user-images.githubusercontent.com/52392004/219922550-19eb73f5-ff9f-4dce-96c7-95bb64248c36.png)
+
+수십 초 정도후에 등록한 이메일로 결과가 전달됩니다. 
 
 ## 실행결과
 
@@ -416,6 +425,14 @@ cdk deply
 
 참고: [API Gateway Log 설정](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/api-gateway-log.md)은
 API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
+
+
+수신된 결과는 아래와 같습니다. 
+
+Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니다. Link 아래에는 추출된 텍스트 정보가 전달됩니다. 
+
+![noname](https://user-images.githubusercontent.com/52392004/219922655-92deefd3-4d84-4f5d-bdb7-040bd16553f2.png)
+
 
 
 ## 정리하기 
