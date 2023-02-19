@@ -13,7 +13,7 @@ if (isset($_FILES['myFile'])) {
         function sendFile(file) {
             const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
             const xhr = new XMLHttpRequest();
-            const fd = new FormData();
+            //const fd = new FormData();
 
             xhr.open("POST", uri, true);
             xhr.onreadystatechange = () => {
@@ -21,13 +21,27 @@ if (isset($_FILES['myFile'])) {
                     alert(xhr.responseText); // handle response.
                 }
             };
-            fd.append('myFile', file);
+            //fd.append('myFile', file);
             // Initiate a multipart/form-data upload
-            xhr.send(fd);
+            //xhr.send(file);
+
+
+            var blob = new Blob([file], {type: 'image/jpeg'});
+
+            xhr.send(blob);
         }
 
         window.onload = () => {
-            const dropzone = document.getElementById("dropzone");
+            var form = document.forms.myform;
+            form.elements.button.onclick = function(){
+                var file = form.elements.filename.files[0];
+                if(file){
+                    sendFile(file);
+                }else{
+                    alert("Not file.");
+                }
+            };
+        /*    const dropzone = document.getElementById("dropzone");
             dropzone.ondragover = dropzone.ondragenter = (event) => {
                 event.stopPropagation();
                 event.preventDefault();
@@ -41,13 +55,16 @@ if (isset($_FILES['myFile'])) {
                 for (let i=0; i<filesArray.length; i++) {
                     sendFile(filesArray[i]);
                 }
-            }
+            } */
         }
     </script>
 </head>
 <body>
     <div>
-        <div id="dropzone" style="margin:30px; width:500px; height:300px; border:1px dotted grey;">Drag & drop your file here</div>
+        <form id="myform">Drag & drop your file here
+            <input type="file" name="filename">
+            <input type="button" name="button" value="Send">
+        </form>
     </div>
 </body>
 </html>
