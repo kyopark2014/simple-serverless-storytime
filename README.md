@@ -12,23 +12,35 @@
 
 주요 사용 시나리오는 아래와 같습니다.
  
-1) 사용자가 동화책과 같은 읽고자 하는 책을 카메라로 찍습니다.
+단계 1: 사용자가 CloudFront 도메인으로 Web 화면에 접속을 시도합니다. 
 
-2) 이미지를 RESTful API를 이용해 API Gateway를 통해 업로드를 합니다. 통신 프로토콜은 https를 이용합니다. 
-이후, Lambda for upload는 S3에 파일을 저장하고, Bucket 이름과 Key와 같은 정보를 event로 SQS에 전달합니다. 
+단계 2: CloudFront와 연결된 S3 bucket에서 html 파일을 로드합니다.
 
-3) SQS의 event는 Lambda for Rekognition에 전달되고, 이 정보는 AWS Rekognition를 통해 JSON 형태의 텍스트 정보를 추울합니다. 
+단계 3: 사용자는 Web화면에서 음성으로 듣고자 하는 이미지 파일을 선택하여 업로드를 합니다. 
 
-4) 텍스트 정보는 다시 SQS를 통해 Lambda for Polly로 전달되는데, JSON 형식의 event에서 텍스트틑 추출하여, AWS Polly를 통해 음성파일로 변환하게 됩니다.
+단계 4: 파일 업로드 요청은 API Gateway의 Restful API인 /upload로 POST Method를 이용해 전달됩니다.
 
-5) 음성파일은 S3에 저장되는데, Lambda for Polly를 이 정보를 CloudForont를 통해 외부에 공유할 수 있는 URL로 변환후, AWS SNS를 통해 사용자에게 이메일로 정보를 전달합니다. 
+단계 5: API Gateway와 연결된 Lambda는 HTTP POST의 body에 있는 binary image를 로드하여 Base64 디코딩후에 S3에 저장합니다. 이후 저장된 파일의 bucket, key와 unique한 request ID를 SQS에 저장합니다.
+
+단계 6: 단계 5에서 SQS에 입력한 event가 Lambda를 trigger하면 Rekognition에 이미지 정보를 전달하여 텍스트를 추출합니다. 이후 텍스트와 request ID를 포함한 정보를 SQS에 저장합니다.
+
+단계 7: 단계 6에서 SQS에 입력한 event가 Lambda를 trigger하면 Polly에 텍스트를 전달하여 음성파일(mp3)을 생성합니다. 음성파일에 대한 정보인 bucket 이름, key값, request ID을 SNS에 전달합니다. 
+
+단계 8: 생성된 mp3는 S3 bucket에 저장됩니다.
+
+단계 9: SNS는 기등록된 이메일 주소로 음성 파일의 URL 정보를 전달합니다. 
+
+단계 10: 사용자는 이메일의 링크를 선택하여 음성파일을 들을 수 있습니다. 
+
 
 상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
 
 ![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
 
-## 파일을 업로드하는 Lambda 함수 구현
+## 이미지에서 텍스트를 추출
+
+### 파일을 업로드하는 Lambda 함수 구현
 
 event로 부터 이미지 데이터와 파일이름을 추출합니다.
 
