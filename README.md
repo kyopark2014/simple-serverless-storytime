@@ -5,7 +5,7 @@
 
 ## Story Time의 Architecture
 
-전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 Managed AI 서비스를 구동하기 위해서 AWS Lambda를 이용하며, [event driven 형태](https://aws.amazon.com/ko/blogs/compute/building-event-driven-architectures-with-amazon-sns-fifo/)의 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두었습니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일 뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버로도 활용가능하지만 일반적인 사용자의 사용성을 고려하여 CloudFront를 이용해 Web 방식으로 구현하였습니다. 
+전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 완전관리형 AI 서비스를 구동하기 위해서 AWS Lambda를 이용하며, [event driven 형태](https://aws.amazon.com/ko/blogs/compute/building-event-driven-architectures-with-amazon-sns-fifo/)의 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두었습니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일 뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버로도 활용가능하지만 일반적인 사용자의 사용성을 고려하여 CloudFront를 이용해 Web 방식으로 구현하였습니다. 
 
 ![image](https://user-images.githubusercontent.com/52392004/219974834-784347ea-709f-4cb5-80e9-2c9dd3ee0140.png)
 
