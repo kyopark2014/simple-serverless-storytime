@@ -46,7 +46,7 @@
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding한 후에 S3에 저장합니다. 이후 사용자의 요청(Request)를 json 형태의 event로 만들어서 SQS에 전송합니다. 
 
-API Gatewa lambda로 전달된 event에는 이미지 파일, Contents-Type, 파일이름이 있습니다. 이를 아래와 같이 추출합니다. 파일이름이 없는 경우에는 uuid로 unique한 이름을 부여하는데, uuid는 이벤트의 구분하기 위한 ID로도 활용됩니다. 
+API Gateway가 lambda로 전달한 event에는 바이너리 이미지 파일, Contents-Type, 파일 이름과 같은 정보가 있습니다. 이를 아래와 같이 추출합니다. 또한, uuid를 생성하여 event를 구분하기 위한 ID로 활용하고, 사용자의 요청에 파일이름이 없는 경우에는 uuid를 파일이름으로 사용합니다.
 
 ```java
 const body = Buffer.from(event["body"], "base64");
@@ -74,7 +74,7 @@ else {
 }
 ```
 
-S3에 파일을 업로드합니다.
+[S3 putObject](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property)을 이용하여 아래와 같이 파일을 업로드합니다.
 
 ```java
 const destparams = {
@@ -86,7 +86,7 @@ const destparams = {
 await s3.putObject(destparams).promise(); 
 ```
 
-Queue에 file 정보를 event로 push 합니다. 
+SQS에 요청(Request) 정보를 event로 push 합니다. 
 
 ```java
 const fileInfo = {
@@ -98,7 +98,7 @@ const fileInfo = {
 let params = {
     DelaySeconds: 10,
     MessageAttributes: {},
-    MessageBody: JSON.stringify(fileInfo),  // To-Do: use UUID as a unique id
+    MessageBody: JSON.stringify(fileInfo), 
     QueueUrl: sqsRekognitionUrl
 };         
 await sqs.sendMessage(params).promise();  
