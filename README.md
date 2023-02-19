@@ -42,17 +42,32 @@
 
 ### 파일을 업로드하는 Lambda 함수 구현
 
-event로 부터 이미지 데이터와 파일이름을 추출합니다.
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding하고 S3에 저장한 다음에 SQS에 변환하여야 할 이미지 정보를 push합니다. 
+
+Upload lambda로 전달된 event에는 이미지 파일, Contents-Type, 파일이름이 있습니다. 이를 아래와 같이 추출합니다. 파일이름이 없는 경우에는 uuid로 unique한 이름을 부여하는데, uuid는 이벤트의 구분하기 위한 ID로도 활용됩니다. 
 
 ```java
 const body = Buffer.from(event["body"], "base64");
+
 const header = event['multiValueHeaders'];
 
+let contentType;
+if(header['Content-Type']) {
+    contentType = String(header['Content-Type']);
+} 
+
+let contentDisposition="";
+if(header['Content-Disposition']) {
+    contentDisposition = String(header['Content-Disposition']);  
+} 
+    
+let filename = "";
+const uuid = uuidv4();
+    
 if(contentDisposition) {
     filename = cd.parse(contentDisposition).parameters.filename;
 }
 else { 
-    const uuid = uuidv4();
     filename = uuid+'.jpeg';
 }
 ```
@@ -69,7 +84,7 @@ const destparams = {
 await s3.putObject(destparams).promise(); 
 ```
 
-Queue에 file정보를 event로 넣습니다. 
+Queue에 file 정보를 event로 push 합니다. 
 
 ```java
 const fileInfo = {
@@ -89,7 +104,10 @@ await sqs.sendMessage(params).promise();
 
 ## Rekognition에 요청하는 Lambda 구현
 
-Lambda로 들어오는 event에서 bucket 이름과 key를 추출하여 아래처럼 Rekognition에 text 추출을 요청합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-rekognition/index.js)에서는 Rekognition을 이용하여 텍스트를 추출하고, SQS에 음성파일로 변환해야할 텍스트 정보를 전달합니다. 
+
+
+아래와 같이 Lambda로 들어오는 event에서 bucket 이름과 key를 추출하여 아래처럼 Rekognition에 text 추출을 요청합니다. 
 
 ```java
 const body = JSON.parse(event['Records'][0]['body']);
@@ -108,7 +126,18 @@ const rekognitionParams = {
 let data = await rekognition.detectText(rekognitionParams).promise();
 ```
 
-이미지 추출 결과를 SQS에 저장합니다. 
+텍스트를 추출합니다.
+
+```java
+let text = "";   
+for (let i = 0; i < data.TextDetections.length; i++) {
+    if(data.TextDetections[i].Type == 'LINE') {
+        text += data.TextDetections[i].DetectedText;
+    }
+}
+```
+
+추출한 텍스트와 event 정보를 모아서 SQS에 push합니다. 
 
 ```java
 let sqsParams = {
@@ -119,31 +148,27 @@ let sqsParams = {
         Bucket: bucket,
         Key: key,
         Name: name,
-        Data: JSON.stringify(data)
+        Text: text
     }),  
     QueueUrl: sqsPollyUrl
 };
 await sqs.sendMessage(sqsParams).promise();   
 ```
 
+
+
+
 ## Polly에 보이스로 변환 요청하는 Lambda 구현
 
-Lambda의 event로부터 text를 추출합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 Polly에 음성파일로 변환을 요청하고, 사용자에게 전달해야할 결과를 SQS에 전송합니다. 
+
+아래와 같이 Lambda의 event로부터 text를 추출히야 Polly에 오디오변환 요청을 하고 결과에서 key 값을 추출합니다. 
 
 ```java
-const body = JSON.parse(event['Records'][0]['body']);
-const data = JSON.parse(body.Data);
-let text = "";
-for (let i = 0; i < data.TextDetections.length; i++) {
-    if(data.TextDetections[i].Type == 'LINE') {
-        text += data.TextDetections[i].DetectedText;
-    }
-}
-```
+const body = JSON.parse(event['Records'][0]['body'])
+const bucket = body.Bucket;
+const text = body.Text;
 
-Polly에 오디오변환 요청을 하고 결과에서 key 값을 추출합니다. 
-
-```java
 let polyParams = {
     OutputFormat: "mp3",
     OutputS3BucketName: bucket,
@@ -159,7 +184,7 @@ const fileInfo = path.parse(pollyUrl);
 key = fileInfo.name + fileInfo.ext;
 ```
 
-SNS에 결과를 전달하도록 요청합니다.
+결과를 SNS에 전달힙니다.
 
 ```java
 const CDN = process.env.CDN; 
@@ -174,7 +199,7 @@ let snsParams = {
 await sns.publish(snsParams).promise();
 ```
 
-## CDK로 배포 준비
+### AWS CDK로 리소스 생성 코드 준비
 
 S3를 생성하고 CloudFront와 연결합니다. 
 
@@ -197,10 +222,6 @@ const distribution = new cloudFront.Distribution(this, 'cloudfront', {
   },
   priceClass: cloudFront.PriceClass.PRICE_CLASS_200,  
 });
-new cdk.CfnOutput(this, 'distributionDomainName', {
-  value: distribution.domainName,
-  description: 'The domain name of the Distribution',
-});
 ```
 
 푸쉬 알림을 보내기 위해 SNS를 생성합니다. 
@@ -210,10 +231,6 @@ const topic = new sns.Topic(this, 'SNS', {
   topicName: 'sns'
 });
 topic.addSubscription(new subscriptions.EmailSubscription(email));
-new cdk.CfnOutput(this, 'snsTopicArn', {
-  value: topic.topicArn,
-  description: 'The arn of the SNS topic',
-});
 ```
 
 아래와 같이 Rekognition과 Polly를 위한 SQS를 정의합니다.
@@ -239,7 +256,6 @@ const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
   timeout: cdk.Duration.seconds(10),
   environment: {
     sqsRekognitionUrl: queueRekognition.queueUrl,
-    topicArn: topic.topicArn,
     bucketName: s3Bucket.bucketName
   }
 });  
@@ -276,7 +292,7 @@ lambdaRekognition.role?.attachInlinePolicy(
 );
 ```
 
-Poly에 텍스트를 보이스로 변환하도록 요청하는 Lambda를 생성합니다.
+텍스트를 음성파일로 변환하도록 Polly에 요청하는 Lambda를 생성합니다.
 
 ```java
 const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
@@ -288,7 +304,8 @@ const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
   environment: {
     CDN: 'https://'+distribution.domainName+'/',
     sqsPollyUrl: queuePolly.queueUrl,
-    topicArn: topic.topicArn
+    topicArn: topic.topicArn,
+    bucketName: s3Bucket.bucketName
   }
 }); 
 lambdaPolly.addEventSource(new SqsEventSource(queuePolly)); 
@@ -314,7 +331,7 @@ const stage = "dev";
 const api = new apiGateway.RestApi(this, 'api-storytime', {
   description: 'API Gateway',
   endpointTypes: [apiGateway.EndpointType.REGIONAL],
-  binaryMediaTypes: ['image/*'], 
+  binaryMediaTypes: ['*/*'], 
   deployOptions: {
     stageName: stage,
   },
@@ -340,12 +357,26 @@ upload.addMethod('POST', new apiGateway.LambdaIntegration(lambdaUpload, {
     }
   ]
 }); 
-new cdk.CfnOutput(this, 'apiUrl', {
-  value: api.url+'upload',
-  description: 'The url of API Gateway',
-});
 ```
 
+CORS 회피를 위해 API Gateway로 구현한 upload API는 CloudFront와 연동됩니다. 
+
+```java
+const myOriginRequestPolicy = new cloudFront.OriginRequestPolicy(this, 'OriginRequestPolicyCloudfront', {
+    originRequestPolicyName: 'QueryStringPolicyCloudfront',
+    comment: 'Query string policy for cloudfront',
+    cookieBehavior: cloudFront.OriginRequestCookieBehavior.none(),
+    headerBehavior: cloudFront.OriginRequestHeaderBehavior.none(),
+    queryStringBehavior: cloudFront.OriginRequestQueryStringBehavior.allowList('deviceid'),
+});
+
+distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
+    cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
+    originRequestPolicy: myOriginRequestPolicy,
+    allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
+    viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+});  
+```
 
 
 ## 왜 이런 Architecture를 선택했는가?
