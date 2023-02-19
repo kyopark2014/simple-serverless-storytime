@@ -476,16 +476,17 @@ cdk bootstrap aws://account-id/ap-northeast-2
 cdk deply
 ```
 
-정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
+정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
 
-![noname](https://user-images.githubusercontent.com/52392004/219947952-5c0a8b3c-164e-48fd-bf4a-7d78d4f27fe2.png)
+![noname](https://user-images.githubusercontent.com/52392004/219975807-e13508f8-2e80-4620-ad84-3b63021bd3f0.png)
+
 
 
 아래와 같이 "html/upload.html" 파일을 오픈하여 UploadUrl 정보를 이용하여 url을 업데이트 합니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219948314-514d5c3c-8e9e-4682-9bdc-a41c00d381a4.png)
 
-이제 수정한 upload.html 파일을 아래와 같이 S3 bucket에 복사합니다. 
+이제 수정한 upload.html 파일을 아래와 같이 S3 bucket에 복사합니다. 이때의 명령어는 UpdateCommend를 참고합니다.
 
 ```java
 aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc
