@@ -530,3 +530,5 @@ cdk destroy
 ## Reference
 
 [Enabling binary support using the API Gateway console](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-payload-encodings-configure-with-console.html)
+
+[HTML 강의](https://opentutorials.org/module/1892/10966)
