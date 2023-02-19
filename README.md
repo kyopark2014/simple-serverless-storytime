@@ -7,7 +7,8 @@
 
 전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 서비스를 구동하기 위해서는 AWS Lambda를 이용하여, 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두어서 event driven 구조로 시스템을 구성합니다. Amazon Serverless로 시스템을 구성하므로 유지보수 및 모니터링에서 불필요한 자원을 최소화하고 시스템을 안정적으로 운용할 수 있습니다. 
 
-<img width="800" alt="image" src="https://user-images.githubusercontent.com/52392004/154789870-4c21323d-6c01-4999-aac1-0119fdb71c02.png">
+![image](https://user-images.githubusercontent.com/52392004/219944322-18bbcdcf-0f04-4a2a-9a39-8f49c0ed5028.png)
+
 
 주요 사용 시나리오는 아래와 같습니다.
  
@@ -25,7 +26,6 @@
 상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
 
 ![image](https://user-images.githubusercontent.com/52392004/219944322-18bbcdcf-0f04-4a2a-9a39-8f49c0ed5028.png)
-
 
 ## 파일을 업로드하는 Lambda 함수 구현
 
