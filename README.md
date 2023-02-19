@@ -5,7 +5,7 @@
 
 ## Story Time의 Architecture
 
-전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 Managed AI 서비스를 구동하기 위해서는 AWS Lambda를 이용하며, event driven 형태의 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두었습니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일 뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버로도 활용가능하지만 일반적인 사용자의 사용성을 고려하여 CloudFront를 이용해 Web 방식으로 구현하였습니다. 
+전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 Managed AI 서비스를 구동하기 위해서 AWS Lambda를 이용하며, event driven 형태의 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두었습니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일 뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버로도 활용가능하지만 일반적인 사용자의 사용성을 고려하여 CloudFront를 이용해 Web 방식으로 구현하였습니다. 
 
 ![image](https://user-images.githubusercontent.com/52392004/219944322-18bbcdcf-0f04-4a2a-9a39-8f49c0ed5028.png)
 
@@ -248,7 +248,7 @@ const queuePolly = new sqs.Queue(this, 'QueuePolly', {
 ```
 
 
-파일 업로드를 처리하는 lambda를 생성하고 SQS와 S3에 대한 퍼미션을 부여합니다. 
+파일 업로드를 처리하는 Lambda를 생성하고 SQS와 S3에 대한 퍼미션을 부여합니다. 
 
 ```java
 const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
@@ -266,7 +266,7 @@ queueRekognition.grantSendMessages(lambdaUpload);
 s3Bucket.grantReadWrite(lambdaUpload);
 ```
 
-Rekognition에 텍스트 추출을 의뢰하는 Lambda를 정의합니다. 
+Rekognition에 텍스트 추출을 의뢰하는 Lambda를 정의합니다. Upload Lambda가 SQS에 저장한 event를 받기위하여 [SQS Event Source]를 등록하고, SQS 전송, S3 읽기, Rekogrnition에 대한 퍼미션을 부여합니다. 
 
 ```java
 const lambdaRekognition = new lambda.Function(this, "LambdaRekognition", {
@@ -295,7 +295,7 @@ lambdaRekognition.role?.attachInlinePolicy(
 );
 ```
 
-텍스트를 음성파일로 변환하도록 Polly에 요청하는 Lambda를 생성합니다. 이때 Lambda가 Polly를 사용할 수 있도록 퍼미션을 추가합니다. 
+텍스트를 음성파일로 변환하도록 Polly에 요청하는 Lambda를 생성합니다. 이때 Lambda는 Rekognition의 결과가 전달되는 SQS를 Event Souce로 등록하고 SNS(topic)에 대한 Publish, S3에 대한 쓰기, 그리고 Polly를 사용할 수 있도록 퍼미션을 추가합니다. 
 
 ```java
 const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
@@ -326,7 +326,7 @@ lambdaPolly.role?.attachInlinePolicy(
 );
 ```
 
-API Gateway를 통해 외부에서 요청을 받습니다. 이때 요청(request)의 body에 있는 이미지 파일을 API Gateway로 처리할때는 proxy를 사용하였습니다. 
+API Gateway를 통해 외부에서 요청을 받습니다. 이때 요청(request)의 body에 있는 이미지 파일을 API Gateway에서 받기 위하여 아래처럼 binaryMediaTypes를 enable하고 proxy 모드로 동작합니다.
 
 ```java
 const stage = "dev";
@@ -362,7 +362,7 @@ upload.addMethod('POST', new apiGateway.LambdaIntegration(lambdaUpload, {
 }); 
 ```
 
-CORS 회피를 위해 API Gateway로 구현한 upload API는 CloudFront와 연동됩니다. 
+[CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) 회피를 위해 API Gateway로 구현한 Upload API는 CloudFront를 이용해 URL Routing을 수행합니다. 파일 업로드는 POST method를 사용하므로 allowedMethods를 cloudFront.AllowedMethods.ALLOW_ALL로 설정하여 POST method를 허용하여야 합니다. 
 
 ```java
 const myOriginRequestPolicy = new cloudFront.OriginRequestPolicy(this, 'OriginRequestPolicyCloudfront', {
