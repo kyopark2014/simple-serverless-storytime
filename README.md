@@ -37,7 +37,7 @@
 [Sequence Diagram](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)을 참고합니다.
 
 
-
+![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
 
 ## 이미지에서 텍스트를 추출
