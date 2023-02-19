@@ -415,21 +415,10 @@ cdk deply
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922550-19eb73f5-ff9f-4dce-96c7-95bb64248c36.png)
 
-수십 초 정도후에 등록한 이메일로 결과가 전달됩니다. 
 
 ## 실행결과
 
-[테스트 및 결과](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/test.md)
-
-파일을 업로드하여 테스트틑 하는 방법과 예상되는 결과를 검토합니다. 
-
-참고: [API Gateway Log 설정](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/api-gateway-log.md)은
-API Gataway에 대한 로그를 CloudWatch에서 확인하기 위한 설정 방법입니다. 
-
-
-수신된 결과는 아래와 같습니다. 
-
-Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니다. Link 아래에는 추출된 텍스트 정보가 전달됩니다. 
+파일을 업로드 한 후에 수십 초가 지나면 아래와 같이 등록한 이메일로 결과가 전달됩니다. Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니다. Link 아래에는 추출된 텍스트 정보가 전달됩니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922655-92deefd3-4d84-4f5d-bdb7-040bd16553f2.png)
 
@@ -437,19 +426,11 @@ Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니
 
 ## 정리하기 
 
-[서버 삭제](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/docs/clean-up.md)에 따라 사용한 리소스를 정리합니다.
-
-
 서버를 더이상 사용하지 않는 경우에 삭제 방법에 대해 기술합니다. 
 
-## Source Codes
-Lambda upload와 notification 에 대한 코드 및 설명은 아래를 참조 바랍니다. 
-
-[[Github: Lambda-upload]](https://github.com/kyopark2014/simple-serverless-storytime-for-upload)
-
-[[Github: Lambda-rekognition]](https://github.com/kyopark2014/simple-serverless-storytime-for-rekognition)
-
-[[Github: Lambda-polly]](https://github.com/kyopark2014/simple-serverless-storytime-for-polly)
+```java
+cdk destroy
+```
 
 
 ## Reference
