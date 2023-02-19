@@ -511,7 +511,7 @@ aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6v
 
 ### 실행결과
 
-파일을 업로드 한 후에 수십 초가 지나면 아래와 같이 등록한 이메일로 결과가 전달됩니다. Link에는 MP3 파일의 경로가 있어서 선택하여 Play 할 수 있습니다. Link 아래에는 추출된 텍스트 정보가 전달됩니다. 
+파일을 업로드 한 후에 수십 초가 지나면 아래와 같이 등록한 이메일로 결과가 전달됩니다. Link에는 MP3 파일의 URL 경로가 있어서 사용자가 선택하면 Play할 수 있습니다. 또한 Link 아래에 추출된 텍스트 정보가 전달됩니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922655-92deefd3-4d84-4f5d-bdb7-040bd16553f2.png)
 
