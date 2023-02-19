@@ -40,7 +40,7 @@
 
 ## 상세 시스템 구성
 
-### 파일을 업로드하는 Lambda 함수 구현
+### 파일을 업로드하는 Lambda의 구현
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding한 후에 S3에 저장합니다. 이후 사용자의 요청(Request)를 json 형태의 event로 만들어서 SQS에 전송합니다. 
 
@@ -102,7 +102,7 @@ let params = {
 await sqs.sendMessage(params).promise();  
 ```
 
-## Rekognition에 요청하는 Lambda 구현
+## Rekognition에 텍스트 추출을 요청하는 Lambda의 구현
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-rekognition/index.js)에서는 Rekognition을 이용하여 텍스트를 추출하고, SQS에 음성 파일로 변환해야 할 텍스트 정보를 전달합니다. 
 
@@ -156,9 +156,7 @@ await sqs.sendMessage(sqsParams).promise();
 ```
 
 
-
-
-## Polly에 음성으로 변환을 요청하는 Lambda 구현
+## Polly에 텍스트를 음성으로 변환을 요청하는 Lambda의 구현
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 이미지에서 추출한 문장을 Polly에 음성 파일로 변환을 요청하고, 결과를 사용자에게 보내기 위해서 SNS로 전송합니다. 
 
@@ -199,9 +197,9 @@ let snsParams = {
 await sns.publish(snsParams).promise();
 ```
 
-### 웹브라우저에서 파일 업로드
+### 웹브라우저에서 파일 업로드 구현
 
-[upload.html](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/html/upload.html)에서는 바이너리 타입으로 이미지 파일을 전달하기위하여 [Blob](https://developer.mozilla.org/ko/docs/Web/API/Blob)을 사용합니다. 
+[upload.html](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/html/upload.html)의 java script는 바이너리 타입으로 이미지 파일을 업로드하기 위하여 [Blob](https://developer.mozilla.org/ko/docs/Web/API/Blob)을 사용합니다. 
 
 ```java
 const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
