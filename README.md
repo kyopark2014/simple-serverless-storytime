@@ -390,7 +390,7 @@ distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
 });  
 ```
 
-
+<!--
 ## 왜 이런 Architecture를 선택했는가?
 
 #### Why Event Driven?
@@ -422,7 +422,7 @@ Lambda -> SQS -> Lambda 대신에 Step Function을 썼을 때와 비교합니다
 
 [Blur faces in videos automatically with Amazon Rekognition Video](https://aws.amazon.com/ko/blogs/machine-learning/blur-faces-in-videos-automatically-with-amazon-rekognition-video/)와 비교하여 설명합니다. 
 
-
+-->
 
 
 
