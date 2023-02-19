@@ -8,43 +8,6 @@ const sqs = new aws.SQS({apiVersion: '2012-11-05'});
 const sqsRekognitionUrl = process.env.sqsRekognitionUrl;
 const bucketName = process.env.bucketName;
 
-// cloudfront setting for api gateway
-const myOriginRequestPolicy = new cloudFront.OriginRequestPolicy(this, 'OriginRequestPolicyCloudfront', {
-    originRequestPolicyName: 'QueryStringPolicyCloudfront',
-    comment: 'Query string policy for cloudfront',
-    cookieBehavior: cloudFront.OriginRequestCookieBehavior.none(),
-    headerBehavior: cloudFront.OriginRequestHeaderBehavior.none(),
-    queryStringBehavior: cloudFront.OriginRequestQueryStringBehavior.allowList('deviceid'),
-});
-
-distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
-    cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
-    originRequestPolicy: myOriginRequestPolicy,
-    allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
-    viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-});    
-
-let contentType;
-if(header['Content-Type']) {
-    contentType = String(header['Content-Type']);
-} 
-
-let contentDisposition="";
-if(header['Content-Disposition']) {
-    contentDisposition = String(header['Content-Disposition']);  
-} 
-    
-let filename = "";
-const uuid = uuidv4();
-    
-if(contentDisposition) {
-    filename = cd.parse(contentDisposition).parameters.filename;
-}
-else { 
-    filename = uuid+'.jpeg';
-}
-
-
 exports.handler = async (event, context) => {
     //console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     //console.log('## EVENT: ' + JSON.stringify(event))
