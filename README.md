@@ -19,7 +19,7 @@
 
 단계 4: 파일 업로드 요청은 Restful 방식이므로 API Gateway의 "/upload" 리소스로 POST Method 방식으로 전달됩니다.
 
-단계 5: API Gateway와 연결된 Lambda는 HTTPS POST의 body에 있는 binary image를 로드하여 Base64 디코딩후에 S3에 저장합니다. 이후 저장된 파일의 bucket, key와 unique한 request ID를 SQS에 전송합니다.
+단계 5: API Gateway와 연결된 Lambda는 HTTPS POST의 body에 있는 binary image를 로드하여 Base64로 디코딩후에 S3에 저장합니다. 이후 저장된 파일의 bucket, key와 unique한 request ID를 SQS에 전송합니다.
 
 단계 6: 단계 5에서 SQS에 전달한 event가 Lambda를 trigger하면 Rekognition에 이미지 정보를 전달하여 텍스트를 추출합니다. 이후 텍스트와 request ID를 포함한 정보를 SQS에 전달합니다.
 
