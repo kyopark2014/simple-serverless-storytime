@@ -158,7 +158,7 @@ await sqs.sendMessage(sqsParams).promise();
 
 
 
-## Polly에 보이스로 변환 요청하는 Lambda 구현
+## Polly에 음성으로 변환을 요청하는 Lambda 구현
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 이미지에서 추출한 문장을 Polly에 음성 파일로 변환을 요청하고, 결과를 사용자에게 보내기 위해서 SNS로 전송합니다. 
 
