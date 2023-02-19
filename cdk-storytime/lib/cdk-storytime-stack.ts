@@ -15,6 +15,7 @@ import * as logs from "aws-cdk-lib/aws-logs"
 
 const stage = "dev";
 const email = "storytimebot21@gmail.com";
+const debug = false;
 
 export class CdkStorytimeStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -24,29 +25,36 @@ export class CdkStorytimeStack extends cdk.Stack {
     const queueRekognition = new sqs.Queue(this, 'QueueRekognition', {
       queueName: "queue-rekognition",
     });
-    new cdk.CfnOutput(this, 'sqsRekognitionUrl', {
-      value: queueRekognition.queueUrl,
-      description: 'The url of the Rekognition Queue',
-    });
+
+    if(debug) {
+      new cdk.CfnOutput(this, 'sqsRekognitionUrl', {
+        value: queueRekognition.queueUrl,
+        description: 'The url of the Rekognition Queue',
+      });
+    }
     
     // SQS - Polly
     const queuePolly = new sqs.Queue(this, 'QueuePolly', {
       queueName: "queue-polly",
     });
-    new cdk.CfnOutput(this, 'sqsPollyUrl', {
-      value: queuePolly.queueUrl,
-      description: 'The url of the Polly Queue',
-    });
+    if(debug) {
+      new cdk.CfnOutput(this, 'sqsPollyUrl', {
+        value: queuePolly.queueUrl,
+        description: 'The url of the Polly Queue',
+      });
+    }
 
     // SNS
     const topic = new sns.Topic(this, 'SNS', {
       topicName: 'sns'
     });
     topic.addSubscription(new subscriptions.EmailSubscription(email));
-    new cdk.CfnOutput(this, 'snsTopicArn', {
-      value: topic.topicArn,
-      description: 'The arn of the SNS topic',
-    });
+    if(debug) {
+        new cdk.CfnOutput(this, 'snsTopicArn', {
+        value: topic.topicArn,
+        description: 'The arn of the SNS topic',
+      });
+    }
 
     // S3 
     const s3Bucket = new s3.Bucket(this, "storage",{
@@ -57,24 +65,20 @@ export class CdkStorytimeStack extends cdk.Stack {
       publicReadAccess: false,
       versioned: false,
     });
-    new cdk.CfnOutput(this, 'bucketName', {
-      value: s3Bucket.bucketName,
-      description: 'The nmae of bucket',
-    });
-    new cdk.CfnOutput(this, 's3Arn', {
-      value: s3Bucket.bucketArn,
-      description: 'The arn of s3',
-    });
-    new cdk.CfnOutput(this, 's3Path', {
-      value: 's3://'+s3Bucket.bucketName,
-      description: 'The path of s3',
-    });
-
-    // copy html files into s3 bucket
-    new s3Deploy.BucketDeployment(this, "UploadHtml", {
-      sources: [s3Deploy.Source.asset("../html")],
-      destinationBucket: s3Bucket,
-    });
+    if(debug) {      
+      new cdk.CfnOutput(this, 'bucketName', {
+        value: s3Bucket.bucketName,
+        description: 'The nmae of bucket',
+      });
+      new cdk.CfnOutput(this, 's3Arn', {
+        value: s3Bucket.bucketArn,
+        description: 'The arn of s3',
+      });
+      new cdk.CfnOutput(this, 's3Path', {
+        value: 's3://'+s3Bucket.bucketName,
+        description: 'The path of s3',
+      });
+    }
 
     // CloudFront
     const distribution = new cloudFront.Distribution(this, 'cloudfront', {
@@ -86,10 +90,12 @@ export class CdkStorytimeStack extends cdk.Stack {
       },
       priceClass: cloudFront.PriceClass.PRICE_CLASS_200,  
     });
-    new cdk.CfnOutput(this, 'distributionDomainName', {
-      value: distribution.domainName,
-      description: 'The domain name of the Distribution',
-    });
+    if(debug) {      
+      new cdk.CfnOutput(this, 'distributionDomainName', {
+        value: distribution.domainName,
+        description: 'The domain name of the Distribution',
+      });
+    }
 
     // Lambda - Upload
     const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
@@ -222,12 +228,12 @@ export class CdkStorytimeStack extends cdk.Stack {
         }
       ]
     }); 
-    new cdk.CfnOutput(this, 'apiUrl', {
+    new cdk.CfnOutput(this, 'ApiGatewayUrl', {
       value: api.url+'upload',
       description: 'The url of API Gateway',
     }); 
 
-    // register api gateway into cloudfront 
+    // cloudfront setting for api gateway
     const myOriginRequestPolicy = new cloudFront.OriginRequestPolicy(this, 'OriginRequestPolicyCloudfront', {
       originRequestPolicyName: 'QueryStringPolicyCloudfront',
       comment: 'Query string policy for cloudfront',
@@ -241,12 +247,21 @@ export class CdkStorytimeStack extends cdk.Stack {
       originRequestPolicy: myOriginRequestPolicy,
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      // viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
     });    
 
-    new cdk.CfnOutput(this, 'uploadUrl', {
+    new cdk.CfnOutput(this, 'ApiGatewayUrlForCloudFront', {
+      value: 'https://'+distribution.domainName+'/upload.html',
+      description: 'The endpoint of API Gateway for upload',
+    });
+
+    new cdk.CfnOutput(this, 'UploadUrl', {
       value: 'https://'+distribution.domainName+'/upload.html',
       description: 'The url of file upload',
-    }); 
+    });
+
+    new cdk.CfnOutput(this, 'UpdateCommend', {
+      value: 'aws s3 cp ./html/upload.html '+'s3://'+s3Bucket.bucketName,
+      description: 'The url of file upload',
+    });      
   } 
 }

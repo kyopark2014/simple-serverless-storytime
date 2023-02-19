@@ -1,10 +1,3 @@
-<?php
-if (isset($_FILES['myFile'])) {
-    // Example:
-    move_uploaded_file($_FILES['myFile']['tmp_name'], "uploads/" . $_FILES['myFile']['name']);
-    exit;
-}
-?><!DOCTYPE html>
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
@@ -13,7 +6,6 @@ if (isset($_FILES['myFile'])) {
         function sendFile(file) {
             const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
             const xhr = new XMLHttpRequest();
-            //const fd = new FormData();
 
             xhr.open("POST", uri, true);
             xhr.onreadystatechange = () => {
@@ -21,13 +13,8 @@ if (isset($_FILES['myFile'])) {
                     alert(xhr.responseText); // handle response.
                 }
             };
-            //fd.append('myFile', file);
-            // Initiate a multipart/form-data upload
-            //xhr.send(file);
-
 
             var blob = new Blob([file], {type: 'image/jpeg'});
-
             xhr.send(blob);
         }
 
@@ -37,34 +24,25 @@ if (isset($_FILES['myFile'])) {
                 var file = form.elements.filename.files[0];
                 if(file){
                     sendFile(file);
+
+                    previewImg.src = URL.createObjectURL(file)
                 }else{
                     alert("Not file.");
                 }
             };
-        /*    const dropzone = document.getElementById("dropzone");
-            dropzone.ondragover = dropzone.ondragenter = (event) => {
-                event.stopPropagation();
-                event.preventDefault();
-            }
-
-            dropzone.ondrop = (event) => {
-                event.stopPropagation();
-                event.preventDefault();
-
-                const filesArray = event.dataTransfer.files;
-                for (let i=0; i<filesArray.length; i++) {
-                    sendFile(filesArray[i]);
-                }
-            } */
         }
     </script>
 </head>
 <body>
+    <h1>Story Time</h1>
+    <h4>Upload the picture about your book</h4>
     <div>
-        <form id="myform">Drag & drop your file here
+        <form id="myform">
             <input type="file" name="filename">
             <input type="button" name="button" value="Send">
         </form>
     </div>
+    <img id="previewImg" width="600" alt="Preview}" />
+    <h4>A MP3 file will be generated from your picture and then delivered to your email address.</h4>
 </body>
 </html>
