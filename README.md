@@ -476,21 +476,22 @@ cdk deply
 cd .. && aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc
 ```
 
-CDK 라이브러리에 등록한 
-
+CDK 라이브러리에 등록한 이메일 주소로 전달된 Confirmation 메시지를 확인하여 아래와 같이 [Confirm subscription]을 선택합니다.
 
 ![noname](https://user-images.githubusercontent.com/52392004/219817649-108b5c81-8460-49e3-a4bd-9af1dd5b091b.png)
 
+정상적으로 Confirm이 되면 아래와 같이 보여집니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219817719-ea749a1a-1b90-406b-94e0-6c28eddb928e.png)
 
 
 
-
-
-#### Curl로 실행하기
-
 #### Web Browser에서 실행하기 
+
+웹브라우저를 
+웹브라우저를 열어서 
+UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고,
+
 
 아래와 같이 [Choose File]버튼을 선택하여 [sample.jpeg](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/sample.jpeg)을 선택합니다. 이후, [Send] 버튼을 선택하면 파일이 업로드됩니다. 
 
