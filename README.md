@@ -200,6 +200,19 @@ let snsParams = {
 await sns.publish(snsParams).promise();
 ```
 
+### 웹브라우저에서 파일 업로드
+
+[upload.html](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/html/upload.html)에서는 바이너리 타입으로 이미지 파일을 전달하기위하여 [Blob](https://developer.mozilla.org/ko/docs/Web/API/Blob)을 사용합니다. 
+
+```java
+const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
+const xhr = new XMLHttpRequest();
+
+xhr.open("POST", uri, true);
+var blob = new Blob([file], {type: 'image/jpeg'});
+xhr.send(blob);
+```
+
 ### AWS CDK로 리소스 생성 코드 준비
 
 AWS 리소스를 효과적으로 배포하기 위하여 [IaC 툴](https://en.wikipedia.org/wiki/Infrastructure_as_code)인 CDK를 이용해 배포하고자 합니다. 여기서 CDK는 Typescript를 이용해 구현합니다. 
