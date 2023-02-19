@@ -3,7 +3,7 @@
 [카메라로 사진을 찍으면 번역](https://itslim.tistory.com/302)을 해주거나 [카메라로 찍은 이미지를 읽어주는 앱](https://youtu.be/G4sZSjAxGAQ)은 머신 러닝(Machine Learning) 기술을 활용하고 있습니다. 이런 머신 러닝 모델을 직접 개발하는것은 상당한 기술적 노하우를 요구합니다. Amazon에서는 SageMaker와 같이 머신 러닝 모델을 개발하는 서비스 이외에도 다양한 Managed AI 서비스를 제공하고 있어서 머신 러닝에 대한 숙련된 인력이 없더라도 이런 서비스를 쉽게 개발할 수 있습니다. 본 게시글에서는 Amazon의 Managed AI 서비스들을 활용하여 사진에서 문장을 추출해서 읽어주는 서비스인 Story Time을 구현하고자 합나다. 이를 통해 머신러닝 기반으로 이미지에서 텍스트틀 추출하하고 텍스트를 음성으로 변환하는 방법을 이해할 수 있습니다. 
 
 
-## Storytime의 Architecture
+## Story Time의 Architecture
 
 전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 서비스를 구동하기 위해서는 AWS Lambda를 이용하여, 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두어서 event driven 구조로 시스템을 구성합니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버를 구성하여 사용할 수도 있으나, CloudFront를 이용해 Web server 및 API 라우팅까지 구현하였습니다. 
 
@@ -164,14 +164,14 @@ await sqs.sendMessage(sqsParams).promise();
 
 [index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-polly/index.js)에서는 이미지에서 추출한 문장을 Polly에 음성 파일로 변환을 요청하고, 결과를 사용자에게 보내기 위해서 SNS로 전송합니다. 
 
-SQS로 부터 얻은 event에서 text와 bucket 이름을 추출하여 Polly 
+SQS로 부터 얻은 event에서 text와 bucket 이름을 추출하여 [Polly에게 음성으로 변환](https://docs.aws.amazon.com/polly/latest/dg/API_StartSpeechSynthesisTask.html)을 요청합니다. 
 
 ```java
 const body = JSON.parse(event['Records'][0]['body'])
 const bucket = body.Bucket;
 const text = body.Text;
 
-let polyParams = {
+let pollyParams = {
     OutputFormat: "mp3",
     OutputS3BucketName: bucket,
     Text: text,
@@ -180,13 +180,13 @@ let polyParams = {
     Engine: 'neural',
 };
 
-pollyResult = await polly.startSpeechSynthesisTask(polyParams).promise();       
+pollyResult = await polly.startSpeechSynthesisTask(pollyParams).promise();       
 const pollyUrl = pollyResult.SynthesisTask.OutputUri;
 const fileInfo = path.parse(pollyUrl);
 key = fileInfo.name + fileInfo.ext;
 ```
 
-결과를 SNS에 전달힙니다.
+추출된 음성파일 결과를 사용자에게 URL로 전달하기 위해서 CloudFront의 도메인 정보를 이용하여 URL을 생성합니다. 또한 메시지에는 추출된 텍스트 결과도 아래와 같이 [SNS에 message로 publish](https://docs.aws.amazon.com/sns/latest/api/API_Publish.html)합니다. 
 
 ```java
 const CDN = process.env.CDN; 
@@ -202,6 +202,8 @@ await sns.publish(snsParams).promise();
 ```
 
 ### AWS CDK로 리소스 생성 코드 준비
+
+AWS 리소스를 효과적으로 배포하기 위하여 IaC 툴인 CDK를 이용해 배포하고자 합니다. 여기서 CDK는 Typescript를 이용해 구현합니다. 
 
 S3를 생성하고 CloudFront와 연결합니다. 
 
@@ -457,11 +459,19 @@ git clone https://github.com/kyopark2014/simple-serverless-storytime
 cd simple-serverless-storytime/cdk-storytime && npm install aws-cdk-lib@2.64.0
 ```
 
-CDK로 전체 인프라를 설치합니다.
+CDK를 처음 사용하는 경우에는 아래와 같이 bootstrap을 실행하여야 합니다. 여기서 account-id은 12자리의 Account Number를 의미합니다. AWS 콘솔화면에서 확인하거나, "aws sts get-caller-identity --query account-id --output text" 명령어로 확인할 수 있습니다.
+
+```java
+cdk bootstrap aws://account-id/ap-northeast-2
+```
+
+이제 CDK로 전체 인프라를 설치합니다.
 
 ```java
 cdk deply
 ```
+
+
 
 정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
 
