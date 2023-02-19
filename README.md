@@ -25,6 +25,8 @@
 
 상세 시나리오는 아래의 Sequence Diagram을 참고 부탁드립니다. 
 
+![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
+
 ![image](https://user-images.githubusercontent.com/52392004/219944322-18bbcdcf-0f04-4a2a-9a39-8f49c0ed5028.png)
 
 ## 파일을 업로드하는 Lambda 함수 구현
