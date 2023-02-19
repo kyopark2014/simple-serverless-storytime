@@ -188,7 +188,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     const api = new apiGateway.RestApi(this, 'api-storytime', {
       description: 'API Gateway',
       endpointTypes: [apiGateway.EndpointType.REGIONAL],
-      binaryMediaTypes: ['image/*'], 
+      binaryMediaTypes: ['*/*'], 
       deployOptions: {
         stageName: stage,
         
@@ -241,6 +241,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       originRequestPolicy: myOriginRequestPolicy,
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      // viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.ALLOW_ALL,
     });    
 
     new cdk.CfnOutput(this, 'uploadUrl', {

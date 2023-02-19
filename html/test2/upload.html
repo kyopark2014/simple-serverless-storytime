@@ -11,7 +11,7 @@ if (isset($_FILES['myFile'])) {
   <title>dnd binary upload</title>
     <script type="application/javascript">
         function sendFile(file) {
-            const uri = "https://d3cz06vcs2mo0q.cloudfront.net/upload";
+            const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
             const xhr = new XMLHttpRequest();
             const fd = new FormData();
 
@@ -21,7 +21,7 @@ if (isset($_FILES['myFile'])) {
                     alert(xhr.responseText); // handle response.
                 }
             };
-            fd.append('myFile', file);
+            fd.append('myFile', btoa(file));
             // Initiate a multipart/form-data upload
             xhr.send(fd);
         }
