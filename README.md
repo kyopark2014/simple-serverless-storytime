@@ -1,11 +1,11 @@
 # 서버리스로 책 읽어주는 서비스를 편리하게 이용하기
 
-[카메라로 사진을 찍으면 번역](https://itslim.tistory.com/302)을 해주거나 [카메라로 찍은 이미지를 읽어주는 앱](https://youtu.be/G4sZSjAxGAQ)은 머신 러닝(Machine Learning) 기술을 활용하고 있습니다. 이런 머신 러닝 모델을 직접 개발하는것은 상당한 기술적 노하우를 요구합니다. Amazon에서는 SageMaker와 같이 머신 러닝 모델을 개발하는 서비스 이외에도 다양한 Managed AI 서비스를 제공하고 있어서 이런 서비스를 쉽게 개발할 수 있습니다. 본 게시글에서는 Amazon의 Managed AI 서비스들을 활용하여 사진에서 문장을 추출해서 읽어주는 서비스인 Story Time을 구현하고자 합나다. 이를 통해 머신러닝 기반으로 이미지에서 텍스트틀 추출하하고 텍스트를 음성으로 변환하는 방법을 이해할 수 있습니다. 
+[카메라로 사진을 찍으면 번역](https://itslim.tistory.com/302)을 해주거나 [카메라로 찍은 이미지를 읽어주는 앱](https://youtu.be/G4sZSjAxGAQ)은 머신 러닝(Machine Learning) 기술을 활용하고 있습니다. 이런 머신 러닝 모델을 직접 개발하는것은 상당한 기술적 노하우를 요구합니다. Amazon에서는 SageMaker와 같이 머신 러닝 모델을 개발하는 서비스 이외에도 다양한 Managed AI 서비스를 제공하고 있어서 머신 러닝에 대한 숙련된 인력이 없더라도 이런 서비스를 쉽게 개발할 수 있습니다. 본 게시글에서는 Amazon의 Managed AI 서비스들을 활용하여 사진에서 문장을 추출해서 읽어주는 서비스인 Story Time을 구현하고자 합나다. 이를 통해 머신러닝 기반으로 이미지에서 텍스트틀 추출하하고 텍스트를 음성으로 변환하는 방법을 이해할 수 있습니다. 
 
 
 ## Storytime의 Architecture
 
-전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 서비스를 구동하기 위해서는 AWS Lambda를 이용하여, 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두어서 event driven 구조로 시스템을 구성합니다. Amazon Serverless로 시스템을 구성하므로 유지보수 및 모니터링에서 불필요한 자원을 최소화하고 시스템을 안정적으로 운용할 수 있습니다. 
+전체적인 Architecture는 아래와 같습니다. Amazon Rekognition을 이용하여 이미지에서 텍스트를 추출하고 Amazon Polly를 이용하여 텍스트를 음성으로 변환합니다. 두 서비스를 구동하기 위해서는 AWS Lambda를 이용하여, 효율적인 시스템을 만들기 위하여 각 서비스 사이에는 Amazon SQS를 두어서 event driven 구조로 시스템을 구성합니다. Amazon Serverless로 시스템을 구성하므로 유지보수면에서 효율적일뿐 아니라, 변동하는 트래픽에서도 auto scaling 통해 시스템을 안정적으로 운용할 수 있습니다. 여기서 제안하는 Architecture는 API Gateway를 Endpoint로 하는 API 서버를 구성하여 사용할 수도 있으나, CloudFront를 이용해 Web server 및 API 라우팅까지 구현하였습니다. 
 
 ![image](https://user-images.githubusercontent.com/52392004/219944322-18bbcdcf-0f04-4a2a-9a39-8f49c0ed5028.png)
 
@@ -40,13 +40,13 @@
 ![image](https://user-images.githubusercontent.com/52392004/156734540-1f4115ac-8ebc-436a-8aad-9be354a6b3a3.png)
 
 
-## 이미지에서 텍스트를 추출
+## 상세 시스템 구성
 
 ### 파일을 업로드하는 Lambda 함수 구현
 
-[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding하고 S3에 저장한 다음에 SQS에 변환하여야 할 이미지 정보를 push합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding한 후에 S3에 저장합니다. 이후 사용자의 요청(Request)를 json 형태의 event로 만들어서 SQS에 전송합니다. 
 
-Upload lambda로 전달된 event에는 이미지 파일, Contents-Type, 파일이름이 있습니다. 이를 아래와 같이 추출합니다. 파일이름이 없는 경우에는 uuid로 unique한 이름을 부여하는데, uuid는 이벤트의 구분하기 위한 ID로도 활용됩니다. 
+API Gatewa lambda로 전달된 event에는 이미지 파일, Contents-Type, 파일이름이 있습니다. 이를 아래와 같이 추출합니다. 파일이름이 없는 경우에는 uuid로 unique한 이름을 부여하는데, uuid는 이벤트의 구분하기 위한 ID로도 활용됩니다. 
 
 ```java
 const body = Buffer.from(event["body"], "base64");
