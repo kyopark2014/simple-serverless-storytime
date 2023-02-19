@@ -461,7 +461,7 @@ CDK로 전체 인프라를 설치합니다.
 cdk deply
 ```
 
-정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html"이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
+정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ./html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219947952-5c0a8b3c-164e-48fd-bf4a-7d78d4f27fe2.png)
 
