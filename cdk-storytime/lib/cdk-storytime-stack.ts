@@ -130,7 +130,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     queuePolly.grantSendMessages(lambdaRekognition);
     s3Bucket.grantRead(lambdaRekognition);
 
-    const RekognitionPolicy = new iam.PolicyStatement({  // rekognition policy
+    const RekognitionPolicy = new iam.PolicyStatement({  
       actions: ['rekognition:*'],
       resources: ['*'],
     });
@@ -143,7 +143,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     // Lambda - Polly
     const lambdaPolly = new lambda.Function(this, "LambdaPolly", {
       runtime: lambda.Runtime.NODEJS_16_X, 
-      functionName: "lambda-for-poly",
+      functionName: "lambda-for-polly",
       code: lambda.Code.fromAsset("../lambda-polly"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
@@ -159,7 +159,7 @@ export class CdkStorytimeStack extends cdk.Stack {
     topic.grantPublish(lambdaPolly);
     s3Bucket.grantWrite(lambdaPolly);
 
-    const PollyPolicy = new iam.PolicyStatement({  // poloy policy
+    const PollyPolicy = new iam.PolicyStatement({  
       actions: ['polly:*'],
       resources: ['*'],
     });
@@ -219,7 +219,7 @@ export class CdkStorytimeStack extends cdk.Stack {
       }], 
       proxy:true, 
     }), {
-      methodResponses: [   // API Gateway sends to the client that called a method.
+      methodResponses: [  
         {
           statusCode: '200',
           responseModels: {
