@@ -422,6 +422,7 @@ cdk deply
 
 ![noname](https://user-images.githubusercontent.com/52392004/219922655-92deefd3-4d84-4f5d-bdb7-040bd16553f2.png)
 
+[Sample.jpeg에 대한 결과](https://raw.githubusercontent.com/kyopark2014/simple-serverless-storytime/main/sample-result.mp3)를 선택해서 생성된 MP3를 확인할 수 있습니다. 
 
 
 ## 정리하기 
