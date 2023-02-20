@@ -42,7 +42,7 @@
 
 ### 파일을 업로드하는 Lambda의 구현
 
-[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 Base64로 decoding한 후에 S3에 저장합니다. 이후 사용자의 요청(Request)를 json 형태의 event로 만들어서 SQS에 전송합니다. 
+[index.js](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/lambda-upload/index.js)에서는 API Gateway로 인입된 이미지 데이터를 base64로 decoding한 후에 S3에 저장합니다. 이후 사용자의 요청(Request)를 json 형태의 event로 만들어서 SQS에 전송합니다. 
 
 API Gateway가 lambda로 전달한 event에는 바이너리 이미지 파일, Contents-Type, 파일 이름과 같은 정보가 있습니다. 이를 아래와 같이 추출합니다. 또한, [uuid](https://en.wikipedia.org/wiki/Universally_unique_identifier)를 생성하여 event를 구분하기 위한 ID로 활용하고, 사용자의 요청에 파일이름이 없는 경우에는 uuid를 파일 이름으로 사용합니다.
 
