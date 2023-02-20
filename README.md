@@ -335,7 +335,7 @@ lambdaPolly.role?.attachInlinePolicy(
 );
 ```
 
-API Gateway를 통해 외부에서 요청을 받습니다. 이때 요청(request)의 body에 있는 이미지 파일을 API Gateway에서 받기 위하여 아래처럼 binaryMediaTypes를 enable하고 proxy 모드로 동작합니다.
+API Gateway를 통해 외부에서 요청을 받습니다. 이때 요청(request)의 body에 있는 이미지 파일을 API Gateway에서 받기 위하여 아래처럼 binaryMediaTypes를 설정하고 proxy 모드로 동작합니다.
 
 ```java
 const stage = "dev";
