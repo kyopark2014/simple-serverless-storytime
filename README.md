@@ -473,7 +473,7 @@ cdk bootstrap aws://account-id/ap-northeast-2
 이제 CDK로 전체 인프라를 생성합니다.
 
 ```java
-cdk deply
+cdk deploy
 ```
 
 정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
