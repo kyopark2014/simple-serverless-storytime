@@ -21,9 +21,9 @@
 
 단계 5: API Gateway와 연결된 Lambda는 HTTPS POST의 body에 있는 binary image를 로드하여 Base64로 디코딩후에 S3에 저장합니다. 이후 저장된 파일의 bucket, key와 unique한 request ID를 SQS에 전송합니다.
 
-단계 6: 단계 5에서 SQS에 전달한 event가 Lambda를 trigger하면 Rekognition에 이미지 정보를 전달하여 텍스트를 추출합니다. 이후 텍스트와 request ID를 포함한 정보를 SQS에 전달합니다.
+단계 6: 단계 5에서 SQS에 전달한 event가 Lambda를 trigger하면 Rekognition에 이미지 정보를 전달하여 텍스트를 추출합니다. 이후 추출된 텍스트와 request ID를 포함한 정보를 SQS에 전달합니다.
 
-단계 7: 단계 6에서 SQS에 입력한 event가 Lambda를 trigger하면 Polly에 텍스트를 전달하여 음성파일(mp3)을 생성합니다. 음성파일에 대한 정보인 bucket 이름, key값, request ID을 SNS에 전달합니다. 
+단계 7: 단계 6에서 SQS에 입력한 event가 Lambda를 trigger하면 Polly에 텍스트를 전달하여 음성파일(mp3)을 생성합니다. 생성된 음성파일에 대한 정보인 bucket 이름, key값, request ID을 SNS에 전달합니다. 
 
 단계 8: Polly는 생성한 음성파일(mp3)을 지정된 S3 bucket에 저장합니다. 이 S3 bucket은 CloudFront를 통해 외부에 공유 될 수 있습니다. 
 
