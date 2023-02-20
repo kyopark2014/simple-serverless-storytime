@@ -58,11 +58,13 @@ rekognition -> rekognition : Image to JSON
 
 rekognition -> lambdaRekognition -- : 200OK (JSON)
 
-lambdaRekognition -> sqsPolly -- : event (JSON)
+lambdaRekognition -> lambdaRekognition : JSON to text
 
-sqsPolly -> lambdaPolly ++ : event (JSON)
 
-lambdaPolly -> lambdaPolly : JSON to text
+lambdaRekognition -> sqsPolly -- : event (text)
+
+sqsPolly -> lambdaPolly ++ : event (text)
+
 
 lambdaPolly -> polly ++ : request\n(text, dest bucket)
 
@@ -79,6 +81,9 @@ sns -> pop3 : request Email
 pop3 -> user : Email notification
 
 user -> cdn : request to download
+
+cdn -> s3: load mp3
+s3 --> cdn : 
 
 cdn -> user : 200OK with mp3
 
