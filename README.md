@@ -17,7 +17,7 @@
 
 단계 3: 사용자는 음성으로 듣고자 하는 이미지 파일을 선택하여 업로드를 시작합니다. 
 
-단계 4: 파일 업로드 요청은 Restful 방식이므로 API Gateway의 "/upload" 리소스로 POST Method 방식으로 전달됩니다.
+단계 4: 파일 업로드 요청은 RESTful 방식이므로 API Gateway의 "/upload" 리소스로 POST Method 방식으로 전달됩니다.
 
 단계 5: API Gateway와 연결된 Lambda는 HTTPS POST의 body에 있는 binary image를 로드하여 Base64로 디코딩후에 S3에 저장합니다. 이후 저장된 파일의 bucket, key와 unique한 request ID를 SQS에 전송합니다.
 
