@@ -15,11 +15,11 @@ exports.handler = async (event) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     console.log('## EVENT: ' + JSON.stringify(event))
     
-    for(record in event['Records']) {
-        const receiptHandle = record['receiptHandle'];
+    for(i in event['Records']) {
+        const receiptHandle = event['Records'][i]['receiptHandle'];
         console.log('receiptHandle: '+receiptHandle);
 
-        const body = JSON.parse(record['body']);
+        const body = JSON.parse(event['Records'][i]['body']);
         console.log('body = ', JSON.stringify(body));
 
         const id = body.Id;
