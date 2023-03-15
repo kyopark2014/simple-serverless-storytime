@@ -15,96 +15,97 @@ exports.handler = async (event) => {
     console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     console.log('## EVENT: ' + JSON.stringify(event))
     
-    const receiptHandle = event['Records'][0]['receiptHandle'];
-    console.log('receiptHandle: '+receiptHandle);
+    for(record in event['Records']) {
+        const receiptHandle = record['receiptHandle'];
+        console.log('receiptHandle: '+receiptHandle);
 
-    const body = JSON.parse(event['Records'][0]['body']);
-    console.log('body = ', JSON.stringify(body));
+        const body = JSON.parse(record['body']);
+        console.log('body = ', JSON.stringify(body));
 
-    const id = body.Id;
-    const bucket = body.Bucket;
-    const name = body.Key;    
-    const text = body.Text;
-    console.log('text: '+text);
+        const id = body.Id;
+        const bucket = body.Bucket;
+        const name = body.Key;    
+        const text = body.Text;
+        console.log('text: '+text);
 
-    console.log('### start polly: ' + id);         
-    let pollyResult, key;
-    try {
-        let pollyParams = {
-            OutputFormat: "mp3",
-            OutputS3BucketName: bucket,
-            Text: text,
-            TextType: "text",
-            //VoiceId: "Joanna",  // adult women
-            VoiceId: "Ivy",  // child girl
-            // VoiceId: "Kevin", // child man
-            // VoiceId: "Matthew", // adult man
-            // Engine: 'standard',
-            Engine: 'neural',
-            // SampleRate: "22050",
-        };
-
-        pollyResult = await polly.startSpeechSynthesisTask(pollyParams).promise();       
-        console.log('pollyResult:', pollyResult);
-
-        const pollyUrl = pollyResult.SynthesisTask.OutputUri;
-        console.log('url: '+pollyUrl);
-
-        const fileInfo = path.parse(pollyUrl);
-        key = fileInfo.name + fileInfo.ext;
-        console.log('key: ', key);
-        console.log('### finish polly: ' + id); 
-
-        // delete messageQueue
-        console.log('### delete messageQueue for ' + id);
+        console.log('### start polly: ' + id);         
+        let pollyResult, key;
         try {
-            let deleteParams = {
-                QueueUrl: sqsPollyUrl,
-                ReceiptHandle: receiptHandle
+            let pollyParams = {
+                OutputFormat: "mp3",
+                OutputS3BucketName: bucket,
+                Text: text,
+                TextType: "text",
+                //VoiceId: "Joanna",  // adult women
+                VoiceId: "Ivy",  // child girl
+                // VoiceId: "Kevin", // child man
+                // VoiceId: "Matthew", // adult man
+                // Engine: 'standard',
+                Engine: 'neural',
+                // SampleRate: "22050",
             };
 
-            sqs.deleteMessage(deleteParams, function(err, data) {
-                if (err) {
-                  console.log("Delete Error", err);
-                } else {
-                  console.log("Success to delete messageQueue: "+id+", deleting messagQueue: ", data.ResponseMetadata.RequestId);
-                }
-            });
+            pollyResult = await polly.startSpeechSynthesisTask(pollyParams).promise();       
+            console.log('pollyResult:', pollyResult);
+
+            const pollyUrl = pollyResult.SynthesisTask.OutputUri;
+            console.log('url: '+pollyUrl);
+
+            const fileInfo = path.parse(pollyUrl);
+            key = fileInfo.name + fileInfo.ext;
+            console.log('key: ', key);
+            console.log('### finish polly: ' + id); 
+
+            // delete messageQueue
+            console.log('### delete messageQueue for ' + id);
+            try {
+                let deleteParams = {
+                    QueueUrl: sqsPollyUrl,
+                    ReceiptHandle: receiptHandle
+                };
+
+                sqs.deleteMessage(deleteParams, function(err, data) {
+                    if (err) {
+                    console.log("Delete Error", err);
+                    } else {
+                    console.log("Success to delete messageQueue: "+id+", deleting messagQueue: ", data.ResponseMetadata.RequestId);
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }   
         } catch (err) {
             console.log(err);
-        }   
-    } catch (err) {
-        console.log(err);
-    } 
-    
-    console.log('### start sns: ' + id);        
-    let url = CDN+key;
-    try {        
-        let snsParams = {
-            Subject: 'Get your voice book generated from '+name,
-            Message: '('+id+') Link: '+url+'\n'+text,         
-            TopicArn: topicArn
-        }; 
-        console.log('snsParams: '+JSON.stringify(snsParams));
+        } 
         
-        const snsResult = await sns.publish(snsParams).promise();
-        console.log('snsResult:', snsResult);
+        console.log('### start sns: ' + id);        
+        let url = CDN+key;
+        try {        
+            let snsParams = {
+                Subject: 'Get your voice book generated from '+name,
+                Message: '('+id+') Link: '+url+'\n'+text,         
+                TopicArn: topicArn
+            }; 
+            console.log('snsParams: '+JSON.stringify(snsParams));
+            
+            const snsResult = await sns.publish(snsParams).promise();
+            console.log('snsResult:', snsResult);
 
-        console.log('### finish sns: ' + id);
-    } catch (err) {
-        console.log(err);
-    } 
+            console.log('### finish sns: ' + id);
+        } catch (err) {
+            console.log(err);
+        } 
 
-    const fileInfo = {
-        Id: id,
-        Name: name,
-        Url: url
-    }; 
-    console.log('Info: ' + JSON.stringify(fileInfo)) 
+        const fileInfo = {
+            Id: id,
+            Name: name,
+            Url: url
+        }; 
+        console.log('Info: ' + JSON.stringify(fileInfo)) 
+    }
 
     const response = {
-        statusCode: 200,
-        body: fileInfo,
-    };
+        statusCode: 200
+    }
     return response;
 };
