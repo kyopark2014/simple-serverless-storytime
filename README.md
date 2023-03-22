@@ -202,7 +202,7 @@ await sns.publish(snsParams).promise();
 [upload.html](https://github.com/kyopark2014/simple-serverless-storytime/blob/main/html/upload.html)의 java script는 바이너리 타입으로 이미지 파일을 업로드하기 위하여 [Blob](https://developer.mozilla.org/ko/docs/Web/API/Blob)을 사용합니다. 
 
 ```java
-const uri = "https://d1kpgkk8y8p43t.cloudfront.net/upload";
+const uri = "/upload";
 const xhr = new XMLHttpRequest();
 
 xhr.open("POST", uri, true);
@@ -458,10 +458,10 @@ git clone https://github.com/kyopark2014/simple-serverless-storytime
 ![noname](https://user-images.githubusercontent.com/52392004/219948651-c724d298-aac6-427c-b072-5ed6edea6fcb.png)
 
 
-터미널로 돌아가서, CDK 폴더로 이동한 후에 CDK v2.64.0을 설치합니다.
+터미널로 돌아가서, CDK 폴더로 이동한 후에 CDK를 설치합니다.
 
 ```java
-cd simple-serverless-storytime/cdk-storytime && npm install aws-cdk-lib@2.64.0
+cd simple-serverless-storytime/cdk-storytime && npm install 
 ```
 
 CDK를 처음 사용하는 경우에는 아래와 같이 bootstrap을 실행하여야 합니다. 여기서 account-id은 12자리의 Account Number를 의미합니다. AWS 콘솔화면에서 확인하거나, "aws sts get-caller-identity --query account-id --output text" 명령어로 확인할 수 있습니다.
@@ -476,21 +476,10 @@ cdk bootstrap aws://account-id/ap-northeast-2
 cdk deploy
 ```
 
-정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 이고, UpdateCommend는 "aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc"입니다. 
+정상적으로 인프라가 설치가 되면 아래와 같은 화면이 노출됩니다. 여기서 UploadUrl은 "https://d1kpgkk8y8p43t.cloudfront.net/upload.html" 입니다. 
 
 ![noname](https://user-images.githubusercontent.com/52392004/219975807-e13508f8-2e80-4620-ad84-3b63021bd3f0.png)
 
-
-
-아래와 같이 "html/upload.html" 파일을 오픈하여 UploadUrl 정보를 이용하여 url을 업데이트 합니다. 
-
-![noname](https://user-images.githubusercontent.com/52392004/219948314-514d5c3c-8e9e-4682-9bdc-a41c00d381a4.png)
-
-이제 수정한 upload.html 파일을 아래와 같이 S3 bucket에 복사합니다. 이때의 명령어는 UpdateCommend를 참고합니다.
-
-```java
-aws s3 cp ../html/upload.html s3://cdkstorytimestack-storage8d9329be-1of8fsmmt6vyc
-```
 
 인프라를 설치하고 나면, CDK 라이브러리에 등록한 이메일 주소로 Confirmation 메시지가 전달됩니다. 이메일을 열어서 아래와 같이 [Confirm subscription]을 선택합니다.
 
