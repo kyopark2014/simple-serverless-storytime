@@ -80,6 +80,12 @@ export class CdkStorytimeStack extends cdk.Stack {
       });
     }
 
+    // copy web files into s3 bucket
+    new s3Deploy.BucketDeployment(this, "upload-HTML", {
+      sources: [s3Deploy.Source.asset("../html")],
+      destinationBucket: s3Bucket,
+    }); 
+
     // CloudFront
     const distribution = new cloudFront.Distribution(this, 'cloudfront', {
       defaultBehavior: {
